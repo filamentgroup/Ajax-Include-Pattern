@@ -9,15 +9,16 @@ Dual licensed under the MIT
 Original idea from Scott Gonzalez :)
 
 To use, place attributes on an already-functional anchor pointing to content that should either replace, or insert before or after that anchor after the page has loaded
-   * Replace:
+
+Replace:
 
     <a href="..." data-replace="articles/latest/fragment">Latest Articles</a>
 
-   * Before:
+Before:
 
     <a href="..." data-before="articles/latest/fragment">Latest Articles</a>
 
-   * After:
+After:
 
     <a href="..." data-after="articles/latest/fragment">Latest Articles</a>
 
