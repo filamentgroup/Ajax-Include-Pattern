@@ -11,13 +11,13 @@ if ( ! isset($type) || ! isset($files) ){
 	exit;
 }
 
-// sanitize input here... :)
-
 $contents = '';
 
 // Loop through the files adding them to a string
 foreach ( $files as $file ) {
-	$contents .= "<page url=\"". $file . "\">" . file_get_contents($file). "</page>\n\n";
+	if( preg_match( '/\.(js|html|css)$/', $file ) ){
+		$contents .= "<page url=\"". $file . "\">" . file_get_contents($file). "</page>\n\n";
+	}
 }
 
 // Set the content type, filesize and an expiration so its not cached
