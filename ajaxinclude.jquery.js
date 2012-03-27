@@ -43,7 +43,7 @@
 
 				if( url && method ){
 					
-					$(this)
+					el
 						.data( "method", method )
 						.data( "url", url )
 						.data( "proxy", proxy )
@@ -65,7 +65,7 @@
 						}
 					}
 					
-					if( k === els.length-1 ){
+					if( !proxy || k === els.length-1 ){
 						$.get( url, function( data ) {	
 							els.trigger( "ajaxInclude", [data] );
 						});
