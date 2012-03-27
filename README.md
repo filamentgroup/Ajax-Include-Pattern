@@ -22,7 +22,10 @@ After:
 
     <a href="..." data-after="articles/latest/fragment">Latest Articles</a>
 
-   * Also, the data-threshold attr allows a min width for this to apply.
+Also, the data-threshold attr allows a min width for this to apply.
+
+Note: these attributes can be placed on any element, not just anchors.
+
 
 On domready, you can apply the plugin like this: 
 
