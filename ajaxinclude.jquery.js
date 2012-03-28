@@ -1,8 +1,7 @@
+/*! Ajax-include pattern. Copyright 2012, Scott Jehl, Filament Group, Inc. Dual licensed under MIT and GPLv2 */
 /*
-  * Ajax-include pattern
-  * Copyright 2012, Scott Jehl, Filament Group, Inc. Original idea from Scott Gonzalez :)
-  * Dual licensed under MIT and GPLv2
-  * to use, place attributes on content, pointing to a URL
+  * Original idea by Scott Gonzalez :)
+  * To use, place attributes on content, pointing to a URL
     * that should either replace, or insert before or after that anchor
     * after the page has loaded
     * Replace:	<a href="..." data-replace="articles/latest/fragment">Latest Articles</a>
