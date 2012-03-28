@@ -1,7 +1,7 @@
 /*
   * anchor-include pattern for already-functional links that work as a client-side include
   * Copyright 2011, Scott Jehl, scottjehl.com
-  * Dual licensed under the MIT
+  * Dual licensed under MIT and GPLv2
   * Idea from Scott Gonzalez
   * to use, place attributes on an already-functional anchor pointing to content
     * that should either replace, or insert before or after that anchor

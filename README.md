@@ -1,14 +1,11 @@
-Ajax-include pattern for already-functional links for use as a client-side fragment include
+# Ajax-include pattern 
 
-Optional proxy allows for a single request for all.
+Copyright 2012, Scott Jehl, Filament Group, Inc. Original idea from Scott Gonzalez :)
 
-Copyright 2012, Scott Jehl, Filament Group, Inc
+Dual licensed under MIT and GPLv2
 
-Dual licensed under the MIT
-
-Original idea from Scott Gonzalez :)
-
-To use, place attributes on an already-functional anchor pointing to content that should either replace, or insert before or after that anchor after the page has loaded
+## How-to
+To use, add attributes to elements in your page where non-essential fragments of content can be included from an external URL, using jQuery-api-like qualifiers like data-after, data-before, data-append, and data-replace:
 
 Replace:
 
@@ -22,16 +19,22 @@ After:
 
     <a href="..." data-after="articles/latest/fragment">Latest Articles</a>
 
+Append:
+
+    <a href="..." data-append="articles/latest/fragment">Latest Articles</a>
+
+
 Also, the data-threshold attr allows a min width for this to apply.
 
 Note: these attributes can be placed on any element, not just anchors.
 
 
-On domready, you can apply the plugin like this: 
+Once the DOM is ready, you can apply the plugin like this: 
 
     $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude();
 	
-Optional Proxy
+
+## Optional Proxy
 
 To use the proxy and include all ajax includes in one call, just pass in a URL that is ready to accept a list of files, such as the ajaxinclude.helper.php file in the root.
 
