@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Ajax Include Pattern</title>
+
+</head>
+<body>
+
+  
+	<p>A few ajax includes, brought in via one request.</p>
+  
+	<div>
+		<h2 data-after="_demo-content/related.html"><a href="_demo-content/related.html">Related Articles</a></h2>
+	</div>
+	<div>
+		<h2 data-after="_demo-content/comments.html"><a href="_demo-content/comments.html">Related Comments</a></h2>
+	</div>
+	<div>
+		<h2 data-after="_demo-content/links.html"><a href="_demo-content/links.html">Related External Links</a></h2>
+	</div>
+	
+  
+  
+  
+  
+  <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script src="ajaxinclude.jquery.js"></script>
+  <script>
+  	$( "[data-after]" ).ajaxInclude( "ajaxinclude.helper.cfm?files=" );
+  </script>
+</body>
+</html>
