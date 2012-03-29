@@ -13,6 +13,7 @@
 <cfoutput>
 	<cfloop from="1" to="#variables.nFileCount#" index="variables.iFile">
 		<cfsavecontent variable="variables.sFileContent">
+			<!--- intentionally using cfmodule here so there are no variable collisions --->
 			<page url="#variables.aFiles[variables.iFile]#"><cfmodule template="#variables.aFiles[variables.iFile]#"></page>
 		</cfsavecontent>
 		<cfset variables.sContents	= variables.sContents & trim(variables.sFileContent)>
