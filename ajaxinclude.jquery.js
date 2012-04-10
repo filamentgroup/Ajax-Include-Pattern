@@ -31,7 +31,7 @@
 				for( var ml = methods.length, i=0; i < ml; i++ ){
 					if( el.is( "[data-" + methods[ i ] + "]" ) ){
 						method	= methods[ i ];
-						url		= el.data( method );
+						url		= el.attr( "data-" + method );
 					}
 				}
 
@@ -44,7 +44,6 @@
 					el
 						.data( "method", method )
 						.data( "url", url )
-						.data( "proxy", proxy )
 						.bind( "ajaxInclude", function(e, data){
 							var content = $(data);
 							
@@ -55,6 +54,8 @@
 						});
 					
 					if( proxy ){
+						
+						el.data( "proxy", proxy );
 						
 						filelist.push( url );
 						
