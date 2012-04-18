@@ -9,12 +9,23 @@
 	variables.aFiles				= variables.lstFiles.split(",");
 	variables.sContents				= "";
 	variables.nFileCount			= arrayLen(variables.aFiles);
+	
+	// guess file type
+	variables.sExtension			= listLast(variables.aFiles[1], ".");
+	if (listFindNoCase("js,html,css", variables.sExtension)) {
+		if (variables.sExtension IS "js") {
+			variables.sType			= "text/javascript";
+		}
+		else {
+			variables.sType			= "text/" & variables.sExtension;
+		}
+	}
 </cfscript>
 <cfoutput>
 	<cfloop from="1" to="#variables.nFileCount#" index="variables.iFile">
 		<cfsavecontent variable="variables.sFileContent">
 			<!--- intentionally using cfmodule here so there are no variable collisions --->
-			<page url="#variables.aFiles[variables.iFile]#"><cfmodule template="#variables.aFiles[variables.iFile]#"></page>
+			<entry url="#variables.aFiles[variables.iFile]#"><cfmodule template="#variables.aFiles[variables.iFile]#"></entry>
 		</cfsavecontent>
 		<cfset variables.sContents	= variables.sContents & trim(variables.sFileContent)>
 	</cfloop>
