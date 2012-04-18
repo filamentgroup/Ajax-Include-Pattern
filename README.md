@@ -1,8 +1,7 @@
 # Ajax-include pattern 
 
-Copyright 2012, Scott Jehl, Filament Group, Inc. Original idea from Scott Gonzalez :)
-
-Dual licensed under MIT and GPLv2
+* Copyright 2012, Scott Jehl, Filament Group, Inc. Original idea from Scott Gonzalez :)
+* Dual licensed under MIT and GPLv2
 
 ## How-to
 To use, add attributes to elements in your page where non-essential fragments of content can be included from an external URL, using jQuery-api-like qualifiers like data-after, data-before, data-append, and data-replace:
@@ -36,6 +35,6 @@ Once the DOM is ready, you can apply the plugin like this:
 
 ## Optional Proxy
 
-To use the proxy and include all ajax includes in one call, just pass in a URL that is ready to accept a list of files, such as the ajaxinclude.helper.php file in the root.
+To use the proxy and include all ajax includes in one call, just pass in a URL that is ready to accept a list of files, such as the included `quickconcat.php` file in the root. Note that `quickconcat.php` is from the external project, [quickconcat](https://github.com/filamentgroup/quickconcat) - check out that project for usage examples.
 
-    $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude( "ajaxinclude.helper.php?files=" );
+    $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude( "quickconcat.php?wrap&files=" );
