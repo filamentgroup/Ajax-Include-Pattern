@@ -20,12 +20,14 @@
 			variables.sType			= "text/" & variables.sExtension;
 		}
 	}
+	
+	variables.bWrap					= structKeyExists(url, "wrap");
 </cfscript>
 <cfoutput>
 	<cfloop from="1" to="#variables.nFileCount#" index="variables.iFile">
 		<cfsavecontent variable="variables.sFileContent">
 			<!--- intentionally using cfmodule here so there are no variable collisions --->
-			<entry url="#variables.aFiles[variables.iFile]#"><cfmodule template="#variables.aFiles[variables.iFile]#"></entry>
+			<cfif variables.bWrap><entry url="#variables.aFiles[variables.iFile]#"></cfif><cfmodule template="#variables.aFiles[variables.iFile]#"><cfif variables.bWrap></entry></cfif>
 		</cfsavecontent>
 		<cfset variables.sContents	= variables.sContents & trim(variables.sFileContent)>
 	</cfloop>
