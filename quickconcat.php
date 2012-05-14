@@ -9,6 +9,12 @@ quickconcat: a simple dynamic concatenator for html, css, and js files
 // List of files, comma-separated paths
 $filelist = $_REQUEST[ "files" ];
 
+// If quickconcat is in a directory off the root, add a relative path here back to the root, like "../"
+$relativeroot = "";
+
+// get the public path to this file, plus the baseurl
+$pubroot = dirname( $_SERVER['PHP_SELF'] ) . "/" . $relativeroot;
+
 // Enclose each result in an element node with url attribute?
 $wrap = isset( $_REQUEST[ "wrap" ] );
 
@@ -32,7 +38,15 @@ foreach ( $files as $file ) {
 	if( preg_match( '/\.(js|html|css)$/', $file ) ){
 		$open = $wrap ? "<entry url=\"". $file . "\">" : "";
 		$close = $wrap ? "</entry>\n" : "";
-		$contents .= $open . file_get_contents($file). $close;
+		$newcontents = $open . file_get_contents($relativeroot . $file). $close;
+		//prefix relative CSS paths (TODO: HTML as well)
+		if( $ftype === "css" ){
+			$prefix = $pubroot . dirname($file) . "/";
+			$newcontents = preg_replace( '/(url\("?)([^\/])([^\:\)]+"?\))/', "$1" . $prefix .  "$2$3", $newcontents );
+			//temp cleanup for root-relative paths that aren't caught when quoted above. should be doable in one replace above
+			$newcontents = preg_replace( '/(url\()([^"]+)(")/', "$1$3", $newcontents ); 
+		}
+		$contents .= $newcontents;
 	}
 }
 
