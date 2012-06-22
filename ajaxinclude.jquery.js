@@ -7,11 +7,11 @@
     * Replace:	<a href="..." data-replace="articles/latest/fragment">Latest Articles</a>
     * Before:	<a href="..." data-before="articles/latest/fragment">Latest Articles</a>
     * After:	<a href="..." data-after="articles/latest/fragment">Latest Articles</a>
-    * Also, the data-threshold attr allows a min width for this to apply.
+    * Also, the data-media attribute
     * After domready, you can use it like this: 
          $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude();
 */
-(function( $ ){
+(function( $, undefined ){
 	$.fn.ajaxInclude = function( proxy ) {
 		
 		var filelist = [],
@@ -19,14 +19,13 @@
 		
 		return this.each(function( k ) {
 			var el			= $( this ),
-				target		= el.data( "target" ),
-				targetEl	= target && $( target ) || el,
-				threshold	= screen.width > parseFloat( el.data( "threshold" ) || 0 ),
+				w			= window,
+				qualify		= el.attr( "data-media" ),
 				methods		= [ "append", "replace", "before", "after" ],
 				method,
 				url;
 
-			if ( threshold ) {
+			if ( !qualify || ( w.matchMedia && w.matchMedia( qualify ).matches ) ) {
 
 				for( var ml = methods.length, i=0; i < ml; i++ ){
 					if( el.is( "[data-" + methods[ i ] + "]" ) ){
@@ -76,4 +75,4 @@
 			}
 		});
 	};
-})( jQuery );
+})( wrap );
