@@ -1,7 +1,7 @@
 # Ajax-include pattern 
 
 * Copyright 2012, Scott Jehl, Filament Group, Inc. Original idea from Scott Gonzalez :)
-* Dual licensed under MIT and GPLv2
+* Dual licensed under MIT and GPLv3
 
 ## How-to
 To use, add attributes to elements in your page where non-essential fragments of content can be included from an external URL, using jQuery-api-like qualifiers like data-after, data-before, data-append, and data-replace:

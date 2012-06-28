@@ -1,0 +1,5 @@
+AUTHORS: Scott Jehl, Filament Group
+
+Other contributors:
+
+Original idea from Scott Gonzalez.

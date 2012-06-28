@@ -1,4 +1,4 @@
-/*! Ajax-include pattern. Copyright 2012, Scott Jehl, Filament Group, Inc. Dual licensed under MIT and GPLv2 */
+/*! Ajax-include pattern. Copyright 2012, Scott Jehl, Filament Group, Inc. Dual licensed under MIT and GPLv3 */
 /*
   * Original idea by Scott Gonzalez :)
   * To use, place attributes on content, pointing to a URL
