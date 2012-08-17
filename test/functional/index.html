@@ -27,7 +27,7 @@
   <script src="../../libs/jquery/jquery.js"></script>
   <script src="../../src/ajaxInclude.js"></script>
   <script>
-  	$( "[data-after]" ).ajaxInclude( "quickconcat.php?wrap&files=" );
+  	$( "[data-after]" ).ajaxInclude( { proxy: "quickconcat.php?wrap&files=" }  );
   </script>
 </body>
 </html>

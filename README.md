@@ -40,9 +40,9 @@ Once the DOM is ready, you can apply the plugin like this:
 
 ## Optional Proxy
 
-To use the proxy and include all ajax includes in one call, just pass in a URL that is ready to accept a list of files, such as the included `quickconcat.php` file in the root. Note that `quickconcat.php` is from the external project, [quickconcat](https://github.com/filamentgroup/quickconcat) - check out that project for usage examples.
+To use the proxy and include all ajax includes in one call, just pass in a URL that is ready to accept a list of files, such as the included `quickconcat.php` file in the root of this demo, as an argument to the `ajaxInclude` method. Note that `quickconcat.php` is from the external project, [quickconcat](https://github.com/filamentgroup/quickconcat) - check out that project for usage examples.
 
-    $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude( "quickconcat.php?wrap&files=" );
+    $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude( { proxy: "quickconcat.php?wrap&files=" } );
 	
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](https://github.com/cowboy/grunt).

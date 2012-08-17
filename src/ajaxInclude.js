@@ -3,10 +3,22 @@
 * Copyright (c) 2012 @scottjehl, Filament Group, Inc.; Licensed MIT */
 
 (function( $, undefined ){
-	$.fn.ajaxInclude = function( proxy ) {
+	$.fn.ajaxInclude = function( options ) {
 		
 		var filelist = [],
-			els = this;
+			els = this,
+			o = {
+				proxy: null
+			};
+		
+		// Option extensions
+		// Sting check: deprected. Formerly, proxy was the single arg.
+		if( typeof options === "string" ){
+			o.proxy = options;
+		}
+		else {
+			o = $.extend( o, options );
+		}
 		
 		return this.each(function( k ) {
 			var el			= $( this ),
@@ -47,22 +59,22 @@
 								.removeAttr( $(this).data( "methodattr" ) );								
 						});
 					
-					if( proxy ){
+					if( o.proxy ){
 						
-						el.data( "proxy", proxy );
+						el.data( "proxy", o.proxy );
 						
 						if( $.inArray( url, filelist ) === -1 ){
 							filelist.push( url );
 						}
 						
 						if( k === els.length - 1 ){
-							url = proxy + filelist.join();
+							url = o.proxy + filelist.join();
 						}
 					}
 					
-					if( !proxy || k === els.length-1 ){
+					if( !o.proxy || k === els.length-1 ){
 						$.get( url, function( data ) {	
-							( proxy ? els : el ).trigger( "ajaxInclude", [data] );
+							( o.proxy ? els : el ).trigger( "ajaxInclude", [data] );
 						});
 					}
 				}
