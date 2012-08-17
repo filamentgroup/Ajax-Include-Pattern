@@ -2,6 +2,10 @@
 * http://filamentgroup.com/lab/ajax_includes_modular_content/
 * Copyright (c) 2012 @scottjehl, Filament Group, Inc.; Licensed MIT */
 
+/*! Ajax-Include - v0.1.0 - 2012-08-17
+* http://filamentgroup.com/lab/ajax_includes_modular_content/
+* Copyright (c) 2012 @scottjehl, Filament Group, Inc.; Licensed MIT */
+
 (function( $, undefined ){
 	$.fn.ajaxInclude = function( proxy ) {
 		
@@ -14,25 +18,27 @@
 				qualify		= el.attr( "data-media" ),
 				methods		= [ "append", "replace", "before", "after" ],
 				method,
+				fixedMethod,
 				url;
 
 			if ( !qualify || ( w.matchMedia && w.matchMedia( qualify ).matches ) ) {
 
 				for( var ml = methods.length, i=0; i < ml; i++ ){
 					if( el.is( "[data-" + methods[ i ] + "]" ) ){
-						method	= methods[ i ];
+						method	= fixedMethod = methods[ i ];
 						url		= el.attr( "data-" + method );
 					}
 				}
 
 				if( method === "replace" ){
-					method += "With";
+					fixedMethod += "With";
 				}
 
-				if( url && method ){
+				if( url && fixedMethod ){
 					
 					el
-						.data( "method", method )
+						.data( "method", fixedMethod )
+						.data( "methodattr", "data-" + method )
 						.data( "url", url )
 						.bind( "ajaxInclude", function(e, data){
 							var content = $(data);
@@ -40,7 +46,9 @@
 							if( $(this).data( "proxy" ) ){
 								content = content.filter( "entry[url=\"" + $(this).data( "url" ) + "\"]" ).html();
 							}
-							$( this )[ $(this).data( "method" ) ]( content );	
+							$( this )
+								[ $(this).data( "method" ) ]( content )
+								.removeAttr( $(this).data( "methodattr" ) );								
 						});
 					
 					if( proxy ){
