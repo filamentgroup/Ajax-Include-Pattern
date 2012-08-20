@@ -7,6 +7,7 @@
 		
 		var filelist = [],
 			els = this,
+			completeAttr = "data-ajax-requested",
 			o = {
 				proxy: null
 			};
@@ -20,43 +21,40 @@
 			o = $.extend( o, options );
 		}
 		
-		return this.each(function( k ) {
+		return this.not( "[" + completeAttr + "]" ).each(function( k ) {
 			var el			= $( this ),
 				w			= window,
 				qualify		= el.attr( "data-media" ),
 				methods		= [ "append", "replace", "before", "after" ],
 				method,
-				fixedMethod,
 				url;
 
 			if ( !qualify || ( w.matchMedia && w.matchMedia( qualify ).matches ) ) {
 
 				for( var ml = methods.length, i=0; i < ml; i++ ){
 					if( el.is( "[data-" + methods[ i ] + "]" ) ){
-						method	= fixedMethod = methods[ i ];
+						method  = methods[ i ];
 						url		= el.attr( "data-" + method );
 					}
 				}
 
 				if( method === "replace" ){
-					fixedMethod += "With";
+					method += "With";
 				}
 
-				if( url && fixedMethod ){
+				if( url && method ){
 					
 					el
-						.data( "method", fixedMethod )
-						.data( "methodattr", "data-" + method )
+						.data( "method", method )
 						.data( "url", url )
+						.attr( completeAttr, true )
 						.bind( "ajaxInclude", function(e, data){
 							var content = $(data);
 							
 							if( $(this).data( "proxy" ) ){
 								content = content.filter( "entry[url=\"" + $(this).data( "url" ) + "\"]" ).html();
 							}
-							$( this )
-								[ $(this).data( "method" ) ]( content )
-								.removeAttr( $(this).data( "methodattr" ) );								
+							$( this )[ $(this).data( "method" ) ]( content );								
 						});
 					
 					if( o.proxy ){
@@ -78,7 +76,6 @@
 						});
 					}
 				}
-
 			}
 		});
 	};
