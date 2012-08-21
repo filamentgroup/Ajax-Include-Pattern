@@ -28,7 +28,7 @@
 			$( "#ev" )
 				.live( "ajaxInclude", function( e, data ){
 					ok( true );
-					ok( $( data ).length );
+					ok( $( data ).length )
 					start();
 				} )
 				.ajaxInclude();
@@ -111,12 +111,24 @@
 						ok( $( "#proxy-b" ).children().length === 1 );
 						ok( $(data).filter("entry").length === 2 );
 						start();
+
 					} );
 					
 				$( "#proxy-a, #proxy-b" ).ajaxInclude( { proxy: "functional/quickconcat.php?wrap&files=" } );
 			} );
 			
-			
+			asyncTest( "Same as previous test, but run with deprecated proxy argument API.", 3, function(){
+				$( "#proxy-d" )
+					.live( "ajaxInclude", function( e, data ){
+						ok( $( "#proxy-c" ).children().length === 1 );
+						ok( $( "#proxy-d" ).children().length === 1 );
+						ok( $(data).filter("entry").length === 2 );
+						start();
+
+					} );
+					
+				$( "#proxy-c, #proxy-d" ).ajaxInclude( "functional/quickconcat.php?wrap&files=" );
+			} );
 			
 			
 		}
