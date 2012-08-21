@@ -75,7 +75,8 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 _Also, please don't edit files in the "dist" subdirectory as they are generated via grunt. You'll find source code in the "src" subdirectory!_
 
 ## Release History
-_(Nothing yet)_
+- 03.28.2012: [Initial release](http://filamentgroup.com/lab/ajax_includes_modular_content/)
+
 
 ## License
 Copyright (c) 2012 @scottjehl, Filament Group, Inc.  
