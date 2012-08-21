@@ -58,7 +58,9 @@ To view some demos, you can visit the following page in your browser, or clone d
 To use the proxy and include all ajax includes in one call, just pass in a URL that is ready to accept a list of files, such as the included `quickconcat.php` file in the root of this demo, as an argument to the `ajaxInclude` method. Note that `quickconcat.php` is from the external project, [quickconcat](https://github.com/filamentgroup/quickconcat) - check out that project for usage examples.
 
     $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude( { proxy: "quickconcat.php?wrap&files=" } );
-	
+
+Note: in prior versions, ajaxInclude supported a single string argument for the proxy url. This is currently deprecated and will be removed in an upcoming version.
+
 ## Browser Support
 
 Ajax-Include works in most modern and semi-modern browsers, even IE6. That said, the `data-media` feature will only work in media-query supporting browsers, and for broad compatibility within media-query supporting browsers, it's recommended that you include the MatchMedia polyfill and MatchMedia `addListener` polyfill. Both can be found in the `libs/` directory, or at [the matchMedia polyfill project on Github](https://github.com/paulirish/matchMedia.js/). To see how these are used alongside ajaxInclude, check out the source of any of the demo pages.
