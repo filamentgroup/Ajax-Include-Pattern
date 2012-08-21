@@ -1,0 +1,3 @@
+<Files ajaxInclude.html>
+AddType application/x-httpd-php .html
+</Files>
