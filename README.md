@@ -28,8 +28,6 @@ Append:
     <a href="..." data-append="articles/latest/fragment">Latest Articles</a>
 
 
-Also, the data-threshold attr allows a min width for this to apply.
-
 Note: these attributes can be placed on any element, not just anchors.
 
 
