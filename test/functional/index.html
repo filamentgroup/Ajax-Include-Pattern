@@ -7,26 +7,12 @@
 </head>
 <body>
 
-  
-	<p>A few ajax includes, brought in via one request.</p>
-  
-	<div>
-		<h2 data-after="_demo-content/related.html"><a href="_demo-content/related.html">Related Articles</a></h2>
-	</div>
-	<div>
-		<h2 data-after="_demo-content/comments.html"><a href="_demo-content/comments.html">Related Comments</a></h2>
-	</div>
-	<div>
-		<h2 data-after="_demo-content/links.html" data-media="(min-width: 40em)"><a href="_demo-content/links.html">Related External Links</a></h2>
-	</div>
-	
-
-  <script src="../../libs/jquery/jquery.js"></script>
-  <script src="../../libs/matchMedia/matchMedia.js"></script>
-  <script src="../../libs/matchMedia/matchMedia.addListener.js"></script>
-  <script src="../../src/ajaxInclude.js"></script>
-  <script>
-  	$( "[data-after]" ).ajaxInclude( { proxy: "quickconcat.php?wrap&files=" }  );
-  </script>
+  	<h1>Ajax Include Demos</p>
+  	
+  	<ul>
+		<li><a href="default.html">Default demo</a></li>
+		<li><a href="media.html">Demo with a media-query qualified include</a></li>
+		<li><a href="proxy.html">Demo with php proxy to combine includes via 1 http request</a></li>
+	</ul>
 </body>
 </html>

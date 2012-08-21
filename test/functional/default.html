@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Ajax Include Pattern</title>
+
+</head>
+<body>
+
+  	<h1>Default demo</p>
+	<p>A few ajax includes, using <code>data-after</code></p>
+  
+	<div>
+		<h2 data-after="_demo-content/related.html"><a href="_demo-content/related.html">Related Articles</a></h2>
+	</div>
+	<div>
+		<h2 data-after="_demo-content/comments.html"><a href="_demo-content/comments.html">Related Comments</a></h2>
+	</div>
+	<div>
+		<h2 data-after="_demo-content/links.html"><a href="_demo-content/links.html">Related External Links</a></h2>
+	</div>
+	
+
+  <script src="../../libs/jquery/jquery.js"></script>
+  <script src="../../libs/matchMedia/matchMedia.js"></script>
+  <script src="../../libs/matchMedia/matchMedia.addListener.js"></script>
+  <script src="../../src/ajaxInclude.js"></script>
+  <script>
+  	$( "[data-after]" ).ajaxInclude( { proxy: "quickconcat.php?wrap&files=" }  );
+  </script>
+</body>
+</html>
