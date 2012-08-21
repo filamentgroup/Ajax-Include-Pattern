@@ -28,7 +28,7 @@
 			$( "#ev" )
 				.live( "ajaxInclude", function( e, data ){
 					ok( true );
-					ok( $( data ).length )
+					ok( $( data ).length );
 					start();
 				} )
 				.ajaxInclude();
