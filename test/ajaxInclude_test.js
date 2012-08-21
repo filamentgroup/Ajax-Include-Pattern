@@ -28,7 +28,7 @@
 			$( "#ev" )
 				.live( "ajaxInclude", function( e, data ){
 					ok( true );
-					ok( $( data ).length )
+					ok( $( data ).length );
 					start();
 				} )
 				.ajaxInclude();
@@ -107,12 +107,10 @@
 			asyncTest( "Proxy includes multiple ajax includes via 1 request and appends in proper locations", 3, function(){
 				$( "#proxy-b" )
 					.live( "ajaxInclude", function( e, data ){
-						console.log($( "#proxy-a" ))
 						ok( $( "#proxy-a" ).children().length === 1 );
 						ok( $( "#proxy-b" ).children().length === 1 );
 						ok( $(data).filter("entry").length === 2 );
 						start();
-
 					} );
 					
 				$( "#proxy-a, #proxy-b" ).ajaxInclude( { proxy: "functional/quickconcat.php?wrap&files=" } );
