@@ -35,6 +35,23 @@ Once the DOM is ready, you can apply the plugin like this:
 
     $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude();
 	
+### media-qualified includes
+
+To include content based on a particular CSS3 Media Query, you can add a `data-media` attribute to the element that already has one of the ajax-include data attributes specified above, and give that attribute a value of any CSS3 media query. The content of that include will only be requested and inserted into the page if and when that media query is valid (which could happen at page load or later on, after an orientation change or resize for example).
+
+Include the referenced fragment at viewport widths of 30em and up:
+
+    <a href="..." data-append="articles/latest/fragment" data-media="(min-width: 30em)">Latest Articles</a>
+
+
+
+## Demos
+
+To view some demos, you can visit the following page in your browser, or clone down this repo and browse to the `test/functional/` directory (you'll need to be running a local web server for the ajax to work in most browsers).
+
+[Ajax-Include Demos](http://filamentgroup.github.com/Ajax-Include-Pattern/test/functional/)
+
+(Note that the proxy demo page will not work at the above URL because it needs to be run on a web server with PHP support.)
 
 ## Optional Proxy
 
@@ -42,6 +59,14 @@ To use the proxy and include all ajax includes in one call, just pass in a URL t
 
     $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude( { proxy: "quickconcat.php?wrap&files=" } );
 	
+## Browser Support
+
+Ajax-Include works in most modern and semi-modern browsers, even IE6. That said, the `data-media` feature will only work in media-query supporting browsers, and for broad compatibility within media-query supporting browsers, it's recommended that you include the MatchMedia polyfill and MatchMedia `addListener` polyfill. Both can be found in the `libs/` directory, or at [the matchMedia polyfill project on Github](https://github.com/paulirish/matchMedia.js/). To see how these are used alongside ajaxInclude, check out the source of any of the demo pages.
+
+## Unit Tests
+
+The unit test suite can be run via `tests/ajaxInclude.html`, or on the Github site [here](http://filamentgroup.github.com/Ajax-Include-Pattern/test/functional/). Note that the unit tests for the optional proxy noted above will only run on a php-supporting web server.
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](https://github.com/cowboy/grunt).
 
