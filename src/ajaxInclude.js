@@ -89,7 +89,7 @@
 					var content = data;
 					
 					if( o.proxy ){
-						var subset = content.match( new RegExp( "<entry url=[\"']*" + el.data( "url" ) + "['\"]*>(?:(?!</entry>)(.|\n))*", "gmi" ) );
+						var subset = content.match( new RegExp( "<entry url=[\"']?" + el.data( "url" ) + "[\"']?>(?:(?!</entry>)(.|\n))*", "gmi" ) );
 						if( subset ){
 							content = subset[ 0 ];
 						}
