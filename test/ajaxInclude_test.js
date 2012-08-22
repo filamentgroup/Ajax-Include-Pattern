@@ -58,7 +58,7 @@
 			ok( dr.length === 1 );
 			
 			dr
-				.live( "ajaxInclude", function(){
+				.live( "ajaxIncludeResponse", function(){
 					ok( $(this).parent().length === 0 );
 					ok( $( "#dr" ).length === 0 );
 					start();
@@ -100,17 +100,42 @@
 			}, 5000 );
 		} );
 		
+		asyncTest( "ajaxIncludeFilter event properly modifies content before inclusion in the page", 3, function(){
+			var response;
+			
+			$( "#filter" )
+				.bind( "ajaxIncludeFilter", function( evt, content ){
+					response = content;
+					return content.replace( /Related/gmi, "Unrelated" );
+				} )
+				
+				.live( "ajaxInclude", function( evt, content ){
+					
+					ok( "ajaxInclude event fired" );
+					ok( content !== response );
+					ok( content.indexOf( "Unrelated" ) > -1 );
+					start();
+				} )
+				.ajaxInclude();
+
+		} );
+		
+
 		/* tests for whether proxy integration is working */
 		if( $( "#proxytests").length ){
 			
 			
 			asyncTest( "Proxy includes multiple ajax includes via 1 request and appends in proper locations", 3, function(){
 				$( "#proxy-b" )
-					.live( "ajaxInclude", function( e, data ){
+					.live( "ajaxInclude", function(){
 						ok( $( "#proxy-a" ).children().length === 1 );
 						ok( $( "#proxy-b" ).children().length === 1 );
-						ok( $(data).filter("entry").length === 2 );
 						start();
+					} )
+					.live( "ajaxIncludeResponse", function( e, data ){
+						
+						ok( $(data).filter("entry").length === 2 );
+						
 
 					} );
 					
@@ -119,11 +144,14 @@
 			
 			asyncTest( "Same as previous test, but run with deprecated proxy argument API.", 3, function(){
 				$( "#proxy-d" )
-					.live( "ajaxInclude", function( e, data ){
+					.live( "ajaxInclude", function(){
 						ok( $( "#proxy-c" ).children().length === 1 );
 						ok( $( "#proxy-d" ).children().length === 1 );
-						ok( $(data).filter("entry").length === 2 );
 						start();
+					} )
+					.live( "ajaxIncludeResponse", function( e, data ){
+						ok( $(data).filter("entry").length === 2 );
+						
 
 					} );
 					

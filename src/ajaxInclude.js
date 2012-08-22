@@ -35,8 +35,8 @@
 		
 		// request a url and trigger ajaxInclude on elements upon response
 		function makeReq( url, els ){
-			$.get( url, function( data ) {	
-				els.trigger( "ajaxInclude", [data] );
+			$.get( url, function( data ) {
+				els.trigger( "ajaxIncludeResponse", [data] );
 			});
 		}
 		
@@ -85,12 +85,26 @@
 				.data( "method", method )
 				.data( "url", url )
 				.attr( boundAttr, true )
-				.bind( "ajaxInclude", function(e, data){
-					var content = $(data);
+				.bind( "ajaxIncludeResponse", function(e, data){
+					var content = data;
+					
 					if( o.proxy ){
-						content = content.filter( "entry[url=\"" + $(this).data( "url" ) + "\"]" ).html();
+						var subset = content.match( new RegExp( "<entry url=[\"']*" + el.data( "url" ) + "['\"]*>(?:(?!</entry>)(.|\n))*", "gmi" ) );
+						if( subset ){
+							content = subset[ 0 ];
+						}
 					}
-					el[ el.data( "method" ) ]( content );								
+					
+					var filteredContent = el.triggerHandler( "ajaxIncludeFilter", [ content ] );
+					
+					if( filteredContent ){
+						content = filteredContent;
+					}
+					
+					el
+						[ el.data( "method" ) ]( content )
+						.trigger( "ajaxInclude", [ content ] );
+											
 				});
 			
 			if ( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ) {
