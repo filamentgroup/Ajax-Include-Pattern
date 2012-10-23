@@ -1,48 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Ajax-Include Test Suite</title>
-  <!-- Load local jQuery, removing access to $ (use jQuery, not $). -->
-  <script src="../libs/jquery/jquery.js"></script>
-  <script>jQuery.noConflict()</script>
-  <!-- Load local QUnit (grunt requires v1.0.0 or newer). -->
-  <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
-  <script src="../libs/qunit/qunit.js"></script>
-  <!-- Load local lib and tests. -->
-  <script src="../libs/jquery/jquery.js"></script>
-  <!-- for IE, etc. -->
-  <script src="../libs/matchMedia/matchMedia.js"></script>
-  <script src="../libs/matchMedia/matchMedia.addListener.js"></script>
-  <!--/ for IE, etc. -->
-  <script src="../src/ajaxInclude.js"></script>
-
-  <script src="ajaxInclude_test.js"></script>
+	<meta charset="utf-8">
+	<title>Ajax-Include Test Suite</title>
+	<!-- Load local jQuery, removing access to $ (use jQuery, not $). -->
+	<script src="../libs/jquery/jquery.js"></script>
+	<script>jQuery.noConflict()</script>
+	<!-- Load local QUnit (grunt requires v1.0.0 or newer). -->
+	<link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
+	<script src="../libs/qunit/qunit.js"></script>
+	<!-- for IE, etc. -->
+	<script src="../libs/matchMedia/matchMedia.js"></script>
+	<script src="../libs/matchMedia/matchMedia.addListener.js"></script>
+	<!--/ for IE, etc. -->
+	<script src="../src/ajaxInclude.js"></script>
+	<script src="ajaxInclude_test.js"></script>
 </head>
 <body>
-  <h1 id="qunit-header">Ajax-Include Test Suite</h1>
-  <h2 id="qunit-banner"></h2>
-  <div id="qunit-testrunner-toolbar"></div>
-  <h2 id="qunit-userAgent"></h2>
-  <ol id="qunit-tests"></ol>
-  <div id="qunit-fixture">
-    
-	<div id="ev" data-before="functional/demo-content/related.html"></div>
-  <div id="dr-ev" data-replace="functional/demo-content/related.html"></div>
-  	<div id="db" data-before="functional/demo-content/related.html"></div>
-	<div id="da" data-after="functional/demo-content/related.html"></div>
-  	<div id="dr" data-replace="functional/demo-content/related.html"></div>
-	<div id="dap" data-append="functional/demo-content/related.html"></div>
-	
-	<div id="filter" data-append="functional/demo-content/related.html"></div>
-	
-	<div id="dm-a" data-media="screen" data-append="functional/demo-content/related.html"></div>
-	<div id="dm-i" data-media="print" data-append="functional/demo-content/related.html"></div>
-	
-	
-	<!-- if php is supported, proxy tests will be included here. <?php echo "-->"; include( "proxy-tests.html" ); echo "<!--"; ?> -->
-	
-	
-  </div>
+	<h1 id="qunit-header">Ajax-Include Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">
+		<div id="ev" data-before="functional/demo-content/related.html"></div>
+		<div id="dr-ev" data-replace="functional/demo-content/related.html"></div>
+		<div id="db" data-before="functional/demo-content/related.html"></div>
+		<div id="da" data-after="functional/demo-content/related.html"></div>
+		<div id="dr" data-replace="functional/demo-content/related.html"></div>
+		<div id="dap" data-append="functional/demo-content/related.html"></div>
+
+		<div id="filter" data-append="functional/demo-content/related.html"></div>
+		
+		<div id="dm-a" data-media="screen" data-append="functional/demo-content/related.html"></div>
+		<div id="dm-i" data-media="print" data-append="functional/demo-content/related.html"></div>
+		<!-- if php is supported, proxy tests will be included here. <?php echo "-->"; include( "proxy-tests.html" ); echo "<!--"; ?> -->
+	</div>
 </body>
 </html>
