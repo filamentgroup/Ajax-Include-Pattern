@@ -21,14 +21,18 @@
 			"url": "http://filamentgroup.com/lab/ajax_includes_modular_content//blob/master/LICENSE-MIT"
 		}
 	],
+	"main": "dist/ajaxInclude.js",
+	"engines": {
+		"node": ">0.6"
+	},
+	"scripts":{
+		"test" : "grunt travis --verbose"
+	},
 	"dependencies": {
 		"jquery": "~1.5"
 	},
 	"devDependencies": {
 		"grunt": "~0.3.17"
 	},
-	"keywords": [],
-	"scripts":{
-		"test" : "grunt travis --verbose"
-	}
+	"keywords": []
 }
