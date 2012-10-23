@@ -100,10 +100,19 @@
 					if( filteredContent ){
 						content = filteredContent;
 					}
+
+					if( method === 'replaceWith' ) {
+						el
+							.trigger( "ajaxInclude", [ content ] )
+							[ el.data( "method" ) ]( content );
+							
+					} else {
+						el
+							[ el.data( "method" ) ]( content )
+							.trigger( "ajaxInclude", [ content ] );
+					}
 					
-					el
-						[ el.data( "method" ) ]( content )
-						.trigger( "ajaxInclude", [ content ] );
+					
 											
 				});
 			
