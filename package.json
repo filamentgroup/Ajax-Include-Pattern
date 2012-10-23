@@ -25,7 +25,7 @@
 		"jquery": "~1.5"
 	},
 	"devDependencies": {
-		"grunt": "*"
+		"grunt": "~0.3.17"
 	},
 	"keywords": [],
 	"scripts":{
