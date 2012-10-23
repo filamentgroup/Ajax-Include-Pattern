@@ -1,4 +1,4 @@
-/*! Ajax-Include - v0.1.0 - 2012-08-22
+/*! Ajax-Include - v0.1.0 - 2012-10-23
 * http://filamentgroup.com/lab/ajax_includes_modular_content/
 * Copyright (c) 2012 @scottjehl, Filament Group, Inc.; Licensed MIT */
 
@@ -104,10 +104,19 @@
 					if( filteredContent ){
 						content = filteredContent;
 					}
+
+					if( method === 'replaceWith' ) {
+						el
+							.trigger( "ajaxInclude", [ content ] )
+							[ el.data( "method" ) ]( content );
+							
+					} else {
+						el
+							[ el.data( "method" ) ]( content )
+							.trigger( "ajaxInclude", [ content ] );
+					}
 					
-					el
-						[ el.data( "method" ) ]( content )
-						.trigger( "ajaxInclude", [ content ] );
+					
 											
 				});
 			
