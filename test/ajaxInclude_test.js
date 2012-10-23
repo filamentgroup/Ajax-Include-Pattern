@@ -33,6 +33,16 @@
 				} )
 				.ajaxInclude();
 		} );
+
+		asyncTest( "ajaxInclude event triggers on data-replace on the target element and event callback contains markup", 2, function(){
+			$( "#dr-ev" )
+				.live( "ajaxInclude", function( e, data ){
+					ok( true );
+					ok( $( data ).length );
+					start();
+				} )
+				.ajaxInclude();
+		} );
 		
 		asyncTest( "Data-before is including content before target element", 1, function(){
 			$( "#db" )
