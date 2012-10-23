@@ -2,7 +2,7 @@
 
 * Copyright 2012, Scott Jehl, Filament Group, Inc. Original idea from Scott Gonzalez :)
 
-[![Build Status](https://secure.travis-ci.org/filamentgroup/Ajax-Include-Pattern.png?branch=tests)](http://travis-ci.org/filamentgroup/Ajax-Include-Pattern)
+[![Build Status](https://travis-ci.org/filamentgroup/Ajax-Include-Pattern.png)](http://travis-ci.org/filamentgroup/Ajax-Include-Pattern)
 
 
 ## Getting Started
