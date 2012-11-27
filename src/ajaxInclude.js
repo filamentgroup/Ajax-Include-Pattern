@@ -1,9 +1,13 @@
+/*! Ajax-Include - v0.1.1 - 2012-11-27
+* http://filamentgroup.com/lab/ajax_includes_modular_content/
+* Copyright (c) 2012 @scottjehl, Filament Group, Inc.; Licensed MIT */
+
 /*! Ajax-Include - v0.1.0 - 2012-08-17
 * http://filamentgroup.com/lab/ajax_includes_modular_content/
 * Copyright (c) 2012 @scottjehl, Filament Group, Inc.; Licensed MIT */
 
 (function( $, undefined ){
-	$.fn.ajaxInclude = function( options ) {
+	$.fn.ajaxInclude = function( options, callback ) {
 		var w = window,
 			urllist = [],
 			elQueue = $(),
@@ -17,10 +21,14 @@
 		if( typeof options === "string" ){
 			o.proxy = options;
 		}
+		// matches no options but a callback function
+		else if( typeof options === "function" ) {
+			callback = options;
+		}
 		else {
 			o = $.extend( o, options );
 		}
-		
+
 		// if it's a proxy, que the element and its url, if not, request immediately
 		function queueOrRequest( el ){
 			var url = el.data( "url" );
@@ -37,6 +45,7 @@
 		function makeReq( url, els ){
 			$.get( url, function( data ) {
 				els.trigger( "ajaxIncludeResponse", [data] );
+				if(callback) {callback();}
 			});
 		}
 		
@@ -62,6 +71,15 @@
 			}
 		}
 		
+		// allow manual loading of content on click for this element 
+		// if option set in .ajaxInclude({ onManualCall : true })
+		// this is needed because onOrientationChange check can avoid ajaxInclude for specific media
+		// ie. iPad portrait does not load content, user need to load manually
+		function manualAjaxInclude (el) {
+			el.one("click", function(e){	
+				queueOrRequest( el );
+			});
+		}
 		// loop through els, bind handlers
 		this.not( "[" + boundAttr + "]" ).each(function( k ) {
 			var el = $( this ),
@@ -116,11 +134,18 @@
 											
 				});
 			
+			if(o.onManualCall) {
+				manualAjaxInclude(el);
+				el.on("click", "a", function(e){ e.preventDefault();  });
+			}
+
 			if ( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ) {
 				queueOrRequest( el );
 			}
 			else if( media && w.matchMedia ){
-				bindForLater( el, media );
+				if(o.onOrientationChange !== false) { 
+					bindForLater( el, media );
+				} 
 			}
 		});
 		
