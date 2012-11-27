@@ -138,7 +138,7 @@
 											
 				});
 			
-			if(o.onManualCall === true) {
+			if(o.onManualCall) {
 				manualAjaxInclude(el);
 				el.on("click", "a", function(e){ e.preventDefault();  });
 			}
@@ -147,7 +147,7 @@
 				queueOrRequest( el );
 			}
 			else if( media && w.matchMedia ){
-				if(o.onOrientationChange !== false) { 
+				if(o.onOrientationChange) { 
 					bindForLater( el, media );
 				} 
 			}
