@@ -70,7 +70,7 @@
 			el.on("click", function(e){	
 				queueOrRequest( el );
 				el.off("click");
-	  		});
+			});
 		}
 		// loop through els, bind handlers
 		this.not( "[" + boundAttr + "]" ).each(function( k ) {
@@ -131,7 +131,7 @@
 				el.on("click", "a", function(e){ e.preventDefault();  });
 			}
 
-  			if ( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ) {
+			if ( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ) {
 				queueOrRequest( el );
 			}
 			else if( media && w.matchMedia ){
