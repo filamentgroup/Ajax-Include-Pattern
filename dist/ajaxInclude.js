@@ -49,7 +49,7 @@
 		function makeReq( url, els ){
 			$.get( url, function( data ) {
 				els.trigger( "ajaxIncludeResponse", [data] );
-				setTimeout( callback, 0 );
+				if(callback) {callback();}
 			});
 		}
 		
@@ -80,9 +80,8 @@
 		// this is needed because onOrientationChange check can avoid ajaxInclude for specific media
 		// ie. iPad portrait does not load content, user need to load manually
 		function manualAjaxInclude (el) {
-			el.on("click", function(e){	
+			el.one("click", function(e){	
 				queueOrRequest( el );
-				el.off("click");
 			});
 		}
 		// loop through els, bind handlers
