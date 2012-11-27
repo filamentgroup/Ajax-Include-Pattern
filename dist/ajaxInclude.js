@@ -147,7 +147,7 @@
 				queueOrRequest( el );
 			}
 			else if( media && w.matchMedia ){
-				if(o.onOrientationChange) { 
+				if(o.onOrientationChange !== false) { 
 					bindForLater( el, media );
 				} 
 			}
