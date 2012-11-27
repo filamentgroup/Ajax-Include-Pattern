@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/filamentgroup/Ajax-Include-Pattern.png)](http://travis-ci.org/filamentgroup/Ajax-Include-Pattern)
 
-[zigotica's fork](https://github.com/zigotica/Ajax-Include-Pattern) added two options: onOrientationChange and onManualCall. Both options are explained later in this Readme.
+[zigotica's fork](https://github.com/zigotica/Ajax-Include-Pattern) added two options: onOrientationChange and onManualCall. Also added the choice of running a callback on ajax success. Both options are explained later in this Readme.
 
 
 ## Getting Started
@@ -57,6 +57,16 @@ onManualCall: to allow downloading content in previous situations or simply when
     $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude({ onOrientationChange: false, onManualCall : true });
 
 (An options.html has been created under test folder)
+
+### onSuccess callback
+
+If you want to execute a callback on ajax success, call ajaxInclude with a callback function name as the last argument (without parentheses):
+
+    $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude({ onOrientationChange: false, onManualCall : true }, picturefill);
+
+It also works if you set it as the only argument:
+
+    $("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude( picturefill );
 
 ## Demos
 

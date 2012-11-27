@@ -1,9 +1,13 @@
+/*! Ajax-Include - v0.1.1 - 2012-11-27
+* http://filamentgroup.com/lab/ajax_includes_modular_content/
+* Copyright (c) 2012 @scottjehl, Filament Group, Inc.; Licensed MIT */
+
 /*! Ajax-Include - v0.1.0 - 2012-08-17
 * http://filamentgroup.com/lab/ajax_includes_modular_content/
 * Copyright (c) 2012 @scottjehl, Filament Group, Inc.; Licensed MIT */
 
 (function( $, undefined ){
-	$.fn.ajaxInclude = function( options ) {
+	$.fn.ajaxInclude = function( options, callback ) {
 		var w = window,
 			urllist = [],
 			elQueue = $(),
@@ -16,6 +20,10 @@
 		// Sting check: deprected. Formerly, proxy was the single arg.
 		if( typeof options === "string" ){
 			o.proxy = options;
+		}
+		// matches no options but a callback function
+		else if( typeof options === "function" ) {
+			callback = options;
 		}
 		else {
 			o = $.extend( o, options );
@@ -37,6 +45,7 @@
 		function makeReq( url, els ){
 			$.get( url, function( data ) {
 				els.trigger( "ajaxIncludeResponse", [data] );
+				setTimeout( callback, 0 );
 			});
 		}
 		
