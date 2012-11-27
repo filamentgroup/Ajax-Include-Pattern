@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Ajax Include Pattern</title>
+
+</head>
+<body>
+
+  	<h1>Options demo</h1>
+	<p>A few ajax includes using <code>data-after</code> at <code>(min-width: 1000px)</code>:</p>
+	<ol>
+		<li>without options</li>
+		<li>adding <code>onManualCall:true</code> (allows loading in smaller devices that dont match media) </li>
+		<li>adding <code>onOrientationChange:false</code> as well (avoids loading when matching media as a result of a change in device Orientation, but leaving onManualCall as a fallback to load the content)</li>
+	</ol>
+  
+	<div>
+		<h2 id="example-1" data-after="demo-content/related.html" data-media="(min-width: 1000px)"><a href="demo-content/related.html">Related Articles</a></h2>
+	</div>
+	<div>
+		<h2 id="example-2" data-after="demo-content/comments.html" data-media="(min-width: 1000px)"><a href="demo-content/comments.html">Related Comments</a></h2>
+	</div>
+	<div>
+		<h2 id="example-3" data-after="demo-content/links.html" data-media="(min-width: 1000px)"><a href="demo-content/links.html">Related External Links</a></h2>
+	</div>
+	
+
+  <script src="../../libs/jquery/jquery.js"></script>
+  <script src="../../libs/matchMedia/matchMedia.js"></script>
+  <script src="../../libs/matchMedia/matchMedia.addListener.js"></script>
+  <script src="../../src/ajaxInclude.js"></script>
+  <script>
+  	$( "#example-1" ).ajaxInclude(   );
+  	$( "#example-2" ).ajaxInclude( { onManualCall : true }  );
+  	$( "#example-3" ).ajaxInclude( { onOrientationChange: false, onManualCall : true }  );
+  </script>
+</body>
+</html>

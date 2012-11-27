@@ -4,6 +4,8 @@
 
 [![Build Status](https://travis-ci.org/filamentgroup/Ajax-Include-Pattern.png)](http://travis-ci.org/filamentgroup/Ajax-Include-Pattern)
 
+[zigotica's fork](https://github.com/zigotica/Ajax-Include-Pattern) added two options: onOrientationChange and onManualCall. Both options are explained later in this Readme.
+
 
 ## Getting Started
 Download the [production version][min] or the [development version][max].
@@ -46,7 +48,15 @@ Include the referenced fragment at viewport widths of 30em and up:
 
     <a href="..." data-append="articles/latest/fragment" data-media="(min-width: 30em)">Latest Articles</a>
 
+### onOrientationChange / onManualCall
 
+onOrientationChange: when set to false it avoids Ajax call when a media query does not evaluate to true onload but later onOrientationChange. This can save bandwith and also avoid confusion when user has passed scrolling area of elements containing ajaxInclude triggers.
+
+onManualCall: to allow downloading content in previous situations or simply when a media query is not met (ie. smaller displays), we can do so manually on click. Script detects links inside ajaxInclude elements and prevents further action since we want to get content via ajax if possible.
+
+$("[data-append],[data-replace],[data-after],[data-before]").ajaxInclude({ onOrientationChange: false, onManualCall : true });
+
+(An options.html has been created under test folder)
 
 ## Demos
 
