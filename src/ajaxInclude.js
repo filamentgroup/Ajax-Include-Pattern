@@ -45,7 +45,7 @@
 		function makeReq( url, els ){
 			$.get( url, function( data ) {
 				els.trigger( "ajaxIncludeResponse", [data] );
-				setTimeout( callback, 0 );
+				callback();
 			});
 		}
 		
