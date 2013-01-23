@@ -8,8 +8,8 @@
 ## Getting Started
 Download the [production version][min] or the [development version][max].
 
-[min]: https://raw.github.com/filamentgroup/ajaxInclude/master/dist/ajaxInclude.min.js
-[max]: https://raw.github.com/filamentgroup/ajaxInclude/master/dist/ajaxInclude.js
+[min]: https://raw.github.com/filamentgroup/Ajax-Include-Pattern/master/dist/ajaxInclude.min.js
+[max]: https://raw.github.com/filamentgroup/Ajax-Include-Pattern/master/dist/ajaxInclude.js
 
 ## How-to
 To use, add attributes to elements in your page where non-essential fragments of content can be included from an external URL, using jQuery-api-like qualifiers like data-after, data-before, data-append, and data-replace:
