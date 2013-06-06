@@ -1,10 +1,6 @@
-/*! Ajax-Include - v0.1.0 - 2012-10-23
+/*! Ajax-Include - v0.1.1 - 2013-06-06
 * http://filamentgroup.com/lab/ajax_includes_modular_content/
-* Copyright (c) 2012 @scottjehl, Filament Group, Inc.; Licensed MIT */
-
-/*! Ajax-Include - v0.1.0 - 2012-08-17
-* http://filamentgroup.com/lab/ajax_includes_modular_content/
-* Copyright (c) 2012 @scottjehl, Filament Group, Inc.; Licensed MIT */
+* Copyright (c) 2013 @scottjehl, Filament Group, Inc.; Licensed MIT */
 
 (function( $, undefined ){
 	$.fn.ajaxInclude = function( options ) {
@@ -12,6 +8,7 @@
 			urllist = [],
 			elQueue = $(),
 			boundAttr = "data-ajax-bound",
+			interactionAttr = "data-interaction",
 			o = {
 				proxy: null
 			};
@@ -38,10 +35,24 @@
 		}
 		
 		// request a url and trigger ajaxInclude on elements upon response
-		function makeReq( url, els ){
-			$.get( url, function( data ) {
-				els.trigger( "ajaxIncludeResponse", [data] );
-			});
+		function makeReq( url, els, isHijax ){
+			if( isHijax && els[ 0 ].tagName.toLowerCase() === 'form' ) {
+				if( $.prototype.serialize ) {
+					// If not post, default to get.
+					var method = ( els.attr( 'method' ) || '' ).toLowerCase() === 'post' ? 'post' : 'get',
+						formData = els.serialize();
+
+					$[ method ]( url, formData, function( data ) {
+						els.trigger( "ajaxIncludeResponse", [data] );
+					});
+				} else {
+					throw new Error( '$.fn.serialize required for ajaxInclude on forms.' );
+				}
+			} else {
+				$.get( url, function( data ) {
+					els.trigger( "ajaxIncludeResponse", [data] );
+				});
+			}
 		}
 		
 		// if there's a url queue
@@ -67,30 +78,40 @@
 		}
 		
 		// loop through els, bind handlers
-		this.not( "[" + boundAttr + "]" ).each(function( k ) {
+		this.not( "[" + boundAttr + "],[" + interactionAttr + "]" ).each(function( k ) {
 			var el = $( this ),
 				media = el.attr( "data-media" ),
 				methods = [ "append", "replace", "before", "after" ],
 				method,
-				url;
-			
+				url,
+				isHijax = false,
+				target = el.attr( "data-target" );
+
 			for( var ml = methods.length, i=0; i < ml; i++ ){
 				if( el.is( "[data-" + methods[ i ] + "]" ) ){
-					method  = methods[ i ];
-					url		= el.attr( "data-" + method );
+					method = methods[ i ];
+					url = el.attr( "data-" + method );
 				}
 			}
-			
+
+			if( !url ) {
+				// <a href> or <form action>
+				url = el.attr( "href" ) || el.attr( "action" );
+				isHijax = true;
+			}
+
 			if( method === "replace" ){
 				method += "With";
 			}
-			
+
 			el
 				.data( "method", method )
 				.data( "url", url )
+				.data( "target", target )
 				.attr( boundAttr, true )
 				.bind( "ajaxIncludeResponse", function(e, data){
-					var content = data;
+					var content = data,
+						targetEl = target ? $( target ) : el;
 					
 					if( o.proxy ){
 						var subset = content.match( new RegExp( "<entry url=[\"']?" + el.data( "url" ) + "[\"']?>(?:(?!</entry>)(.|\n))*", "gmi" ) );
@@ -106,21 +127,23 @@
 					}
 
 					if( method === 'replaceWith' ) {
-						el
-							.trigger( "ajaxInclude", [ content ] )
-							[ el.data( "method" ) ]( content );
+						el.trigger( "ajaxInclude", [ content ] );
+						targetEl[ el.data( "method" ) ]( content );
 							
 					} else {
-						el
-							[ el.data( "method" ) ]( content )
-							.trigger( "ajaxInclude", [ content ] );
+						targetEl[ el.data( "method" ) ]( content );
+						el.trigger( "ajaxInclude", [ content ] );
 					}
 					
 					
 											
 				});
-			
-			if ( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ) {
+
+			// When hijax, ignores matchMedia, proxies/queueing
+			if ( isHijax ) {
+				makeReq( url, el, true );
+			}
+			else if ( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ) {
 				queueOrRequest( el );
 			}
 			else if( media && w.matchMedia ){
