@@ -47,6 +47,36 @@ Include the referenced fragment at viewport widths of 30em and up:
     <a href="..." data-append="articles/latest/fragment" data-media="(min-width: 30em)">Latest Articles</a>
 
 
+### HijaxInclude
+
+To include content when a user clicks on a link or submits a form, use the `data-interaction` attribute.  `data-interaction` will block ajaxInclude from executing on this element until you explicitly remove it and subsequently call `ajaxInclude()`.
+
+    <a href="articles/latest/fragment" data-replace data-interaction>Latest Articles</a>
+
+
+    $( "a[data-interaction]" ).bind( "click", function() {
+      $( this ).removeAttr( "data-interaction" ).ajaxInclude();
+      return false;
+    });
+
+This also works with forms (get and post) when `$(...).serialize()` is available.
+
+    <form action="demo-content/form-response.html" method="post" data-replace data-interaction>
+      <input type="text" name="textField" value="Test">
+      <input type="submit" value="Submit">
+    </form>
+
+
+    $( "form[data-interaction]" ).bind( "submit", function() {
+      $( this ).removeAttr( "data-interaction" ).ajaxInclude();
+      return false;
+    });
+
+### Targeting a separate element.
+
+To include content on a separate element, include a CSS selector to select a new element in the `data-target` attribute.  The following example appends the fragment inside of `#my-new-target` rather than inside of the `<a>`.
+
+    <a href="..." data-append="articles/latest/fragment" data-target="#my-new-target">Latest Articles</a>
 
 ## Demos
 
