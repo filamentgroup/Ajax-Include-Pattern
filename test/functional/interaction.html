@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Ajax Include Pattern</title>
+<style>
+body > div {
+	border-bottom: 1px solid #eee;
+}
+</style>
+</head>
+<body>
+
+		<h1>Requires interaction demo</h1>
+	<p>A few ajax includes, using <code>data-after</code></p>
+	
+	<div>
+		<h2 data-after="demo-content/comments.html"><a href="demo-content/comments.html">Related Comments (non-interaction)</a></h2>
+	</div>
+	<div>
+		<h2 id="my-target"><a href="demo-content/related.html" data-after data-interaction data-target="#my-target">Related Articles (after)</a></h2>
+	</div>
+	<div>
+		<h2 id="my-target2"><a href="demo-content/related.html" data-before data-interaction data-target="#my-target2">Related Articles (before)</a></h2>
+	</div>
+	<div>
+		<h2 id="my-target3"><a href="demo-content/related.html" data-replace data-interaction data-target="#my-target3">Related Articles (replace)</a></h2>
+	</div>
+	<div>
+		<h2 id="my-target4"><a href="demo-content/related.html" data-append data-interaction data-target="#my-target4">Related Articles (append)</a></h2>
+	</div>
+	<div>
+		<h2>Form (get) Example</h2>
+		<form action="demo-content/form-response.html" method="get" data-replace data-interaction>
+			<input type="text" name="textField" value="Test">
+			<input type="submit" value="Submit">
+		</form>
+		<h2>Form (post) Example</h2>
+		<form action="demo-content/form-response.html" method="post" data-replace data-interaction>
+			<input type="text" name="textField" value="Test">
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+
+	<script src="../../libs/jquery/jquery.js"></script>
+	<script src="../../libs/matchMedia/matchMedia.js"></script>
+	<script src="../../libs/matchMedia/matchMedia.addListener.js"></script>
+	<script src="../../src/ajaxInclude.js"></script>
+	<script>
+		$( "[data-after],[data-before],[data-append],[data-replace]" ).ajaxInclude();
+
+		$( "a[data-interaction]" ).bind( "click", function() {
+			$( this ).removeAttr( "data-interaction" ).ajaxInclude();
+			return false;
+		});
+
+		$( "form[data-interaction]" ).bind( "submit", function() {
+			$( this ).removeAttr( "data-interaction" ).ajaxInclude();
+			return false;
+		});
+	</script>
+</body>
+</html>

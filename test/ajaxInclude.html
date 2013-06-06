@@ -34,6 +34,19 @@
 		
 		<div id="dm-a" data-media="screen" data-append="functional/demo-content/related.html"></div>
 		<div id="dm-i" data-media="print" data-append="functional/demo-content/related.html"></div>
+		<div>
+			<a id="hijax-a" href="functional/demo-content/related.html" data-after data-interaction></a>
+		</div>
+		<div>
+			<form id="hijax-form" action="functional/demo-content/related.html" data-after data-interaction>
+				<input type="text" name="textField" value="value">
+				<input type="submit">
+			</form>
+		</div>
+		<div>
+			<a id="target-a" href="functional/demo-content/related.html" data-append data-target="#new-target-a"></a>
+			<div id="new-target-a"></div>
+		</div>
 		<!-- if php is supported, proxy tests will be included here. <?php echo "-->"; include( "proxy-tests.html" ); echo "<!--"; ?> -->
 	</div>
 </body>

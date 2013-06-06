@@ -129,7 +129,41 @@
 				.ajaxInclude();
 
 		} );
-		
+
+		asyncTest( "ajaxInclude hijax a link", 1, function(){
+			$( "#hijax-a" )
+				.bind( "click", function() {
+					$( this ).removeAttr( 'data-interaction' ).ajaxInclude();
+					return false;
+				})
+				.live( "ajaxInclude", function(){
+					ok( $( "#hijax-a" ).parent().children().length > 1 );
+					start();
+				} )
+				.trigger( "click" );
+		} );
+
+		asyncTest( "ajaxInclude hijax a form", 1, function(){
+			$( "#hijax-form" )
+				.bind( "submit", function() {
+					$( this ).removeAttr( 'data-interaction' ).ajaxInclude();
+					return false;
+				})
+				.live( "ajaxInclude", function(){
+					ok( $( "#hijax-form" ).parent().children().length > 1 );
+					start();
+				} )
+				.trigger( "submit" );
+		} );
+
+		asyncTest( "arbitrary target element for ajaxInclude content", 1, function(){
+			$( "#target-a" )
+				.live( "ajaxInclude", function(){
+					ok( $( "#new-target-a" ).children().length > 0 );
+					start();
+				} )
+				.ajaxInclude();
+		} );
 
 		/* tests for whether proxy integration is working */
 		if( $( "#proxytests").length ){
