@@ -36,17 +36,17 @@
 		
 		// request a url and trigger ajaxInclude on elements upon response
 		function makeReq( url, els, isHijax ){
-			if( isHijax && els[ 0 ].tagName.toLowerCase() == 'form' ) {
+			if( isHijax && els[ 0 ].tagName.toLowerCase() === 'form' ) {
 				if( $.prototype.serialize ) {
 					// If not post, default to get.
-					var method = ( els.attr( 'method' ) || '' ).toLowerCase() == 'post' ? 'post' : 'get',
+					var method = ( els.attr( 'method' ) || '' ).toLowerCase() === 'post' ? 'post' : 'get',
 						formData = els.serialize();
 
 					$[ method ]( url, formData, function( data ) {
 						els.trigger( "ajaxIncludeResponse", [data] );
 					});
 				} else {
-					throw Error( '$.fn.serialize required for ajaxInclude on forms.' );
+					throw new Error( '$.fn.serialize required for ajaxInclude on forms.' );
 				}
 			} else {
 				$.get( url, function( data ) {
