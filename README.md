@@ -59,7 +59,7 @@ To include content when a user clicks on a link or submits a form, use the `data
       return false;
     });
 
-This also works with forms (get and post) when `$(...).serialize()` is available.
+This also works with forms (get and post), if you include `src/ajaxIncludeForms.js` (or `dist/ajaxIncludePlugins.js`) and `$(...).serialize()` is available.
 
     <form action="demo-content/form-response.html" method="post" data-replace data-interaction>
       <input type="text" name="textField" value="Test">
