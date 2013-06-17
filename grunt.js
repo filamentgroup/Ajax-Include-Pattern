@@ -15,12 +15,20 @@ module.exports = function(grunt) {
 			dist: {
 				src: ['<banner:meta.banner>', '<file_strip_banner:src/<%= pkg.name %>.js>'],
 				dest: 'dist/<%= pkg.name %>.js'
+			},
+			plugins: {
+				src: ['<banner:meta.banner>', '<file_strip_banner:src/ajaxIncludeForms.js>'],
+				dest: 'dist/ajaxIncludePlugins.js'
 			}
 		},
 		min: {
 			dist: {
 				src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
 				dest: 'dist/<%= pkg.name %>.min.js'
+			},
+			plugins: {
+				src: ['<banner:meta.banner>', '<config:concat.plugins.dest>'],
+				dest: 'dist/ajaxIncludePlugins.min.js'
 			}
 		},
 		qunit: {

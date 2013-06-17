@@ -1,16 +1,25 @@
-(function( $, undefined ){
+(function( $, win, undefined ){
+
+	var AI = {
+		boundAttr: "data-ajax-bound",
+		interactionAttr: "data-interaction",
+		// request a url and trigger ajaxInclude on elements upon response
+		makeReq: function( url, els, isHijax ) {
+			$.get( url, function( data ) {
+				els.trigger( "ajaxIncludeResponse", [data] );
+			});
+		}
+	};
+
 	$.fn.ajaxInclude = function( options ) {
-		var w = window,
-			urllist = [],
+		var urllist = [],
 			elQueue = $(),
-			boundAttr = "data-ajax-bound",
-			interactionAttr = "data-interaction",
 			o = {
 				proxy: null
 			};
-		
+
 		// Option extensions
-		// Sting check: deprected. Formerly, proxy was the single arg.
+		// String check: deprecated. Formerly, proxy was the single arg.
 		if( typeof options === "string" ){
 			o.proxy = options;
 		}
@@ -26,35 +35,14 @@
 				elQueue = elQueue.add( el );
 			}
 			else{
-				makeReq( el.data( "url" ), el );
-			}
-		}
-		
-		// request a url and trigger ajaxInclude on elements upon response
-		function makeReq( url, els, isHijax ){
-			if( isHijax && els[ 0 ].tagName.toLowerCase() === 'form' ) {
-				if( $.prototype.serialize ) {
-					// If not post, default to get.
-					var method = ( els.attr( 'method' ) || '' ).toLowerCase() === 'post' ? 'post' : 'get',
-						formData = els.serialize();
-
-					$[ method ]( url, formData, function( data ) {
-						els.trigger( "ajaxIncludeResponse", [data] );
-					});
-				} else {
-					throw new Error( '$.fn.serialize required for ajaxInclude on forms.' );
-				}
-			} else {
-				$.get( url, function( data ) {
-					els.trigger( "ajaxIncludeResponse", [data] );
-				});
+				AI.makeReq( url, el );
 			}
 		}
 		
 		// if there's a url queue
 		function runQueue(){
 			if( urllist.length ){
-				makeReq( o.proxy + urllist.join( "," ), elQueue );
+				AI.makeReq( o.proxy + urllist.join( "," ), elQueue );
 				elQueue = $();
 				urllist = [];
 			}
@@ -62,7 +50,7 @@
 		
 		// bind a listener to a currently-inapplicable media query for potential later changes
 		function bindForLater( el, media ){
-			var mm = w.matchMedia( media );
+			var mm = win.matchMedia( media );
 			function cb(){
 				queueOrRequest( el );
 				runQueue();
@@ -74,7 +62,7 @@
 		}
 		
 		// loop through els, bind handlers
-		this.not( "[" + boundAttr + "],[" + interactionAttr + "]" ).each(function( k ) {
+		this.not( "[" + AI.boundAttr + "],[" + AI.interactionAttr + "]" ).each(function( k ) {
 			var el = $( this ),
 				media = el.attr( "data-media" ),
 				methods = [ "append", "replace", "before", "after" ],
@@ -104,7 +92,7 @@
 				.data( "method", method )
 				.data( "url", url )
 				.data( "target", target )
-				.attr( boundAttr, true )
+				.attr( AI.boundAttr, true )
 				.bind( "ajaxIncludeResponse", function(e, data){
 					var content = data,
 						targetEl = target ? $( target ) : el;
@@ -125,24 +113,20 @@
 					if( method === 'replaceWith' ) {
 						el.trigger( "ajaxInclude", [ content ] );
 						targetEl[ el.data( "method" ) ]( content );
-							
 					} else {
 						targetEl[ el.data( "method" ) ]( content );
 						el.trigger( "ajaxInclude", [ content ] );
 					}
-					
-					
-											
 				});
 
 			// When hijax, ignores matchMedia, proxies/queueing
 			if ( isHijax ) {
-				makeReq( url, el, true );
+				AI.makeReq( url, el, true );
 			}
-			else if ( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ) {
+			else if ( !media || ( win.matchMedia && win.matchMedia( media ).matches ) ) {
 				queueOrRequest( el );
 			}
-			else if( media && w.matchMedia ){
+			else if( media && win.matchMedia ){
 				bindForLater( el, media );
 			}
 		});
@@ -153,4 +137,6 @@
 		// return elems
 		return this;
 	};
-}( jQuery ));
+
+	win.AjaxInclude = AI;
+}( jQuery, this ));
