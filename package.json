@@ -2,7 +2,7 @@
 	"name": "ajaxInclude",
 	"title": "Ajax-Include",
 	"description": "An Ajax-Include Pattern for Modular Content",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"homepage": "http://filamentgroup.com/lab/ajax_includes_modular_content/",
 	"author": {
 		"name": "@scottjehl, Filament Group, Inc.",
