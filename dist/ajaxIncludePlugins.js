@@ -1,4 +1,4 @@
-/*! Ajax-Include - v0.1.2 - 2013-06-17
+/*! Ajax-Include - v0.1.2 - 2013-06-18
 * http://filamentgroup.com/lab/ajax_includes_modular_content/
 * Copyright (c) 2013 @scottjehl, Filament Group, Inc.; Licensed MIT */
 
@@ -13,8 +13,8 @@
 					var method = ( els.attr( 'method' ) || '' ).toLowerCase() === 'post' ? 'post' : 'get',
 						formData = els.serialize();
 
-					$[ method ]( url, formData, function( data ) {
-						els.trigger( "ajaxIncludeResponse", [data] );
+					$[ method ]( url, formData, function( data, status, xhr ) {
+						els.trigger( "ajaxIncludeResponse", [ data, xhr ] );
 					});
 				} else {
 					throw new Error( '$.fn.serialize required for ajaxInclude on forms.' );

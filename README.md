@@ -59,18 +59,7 @@ To include content when a user clicks on a link or submits a form, use the `data
       return false;
     });
 
-This also works with forms (get and post), if you include `src/ajaxIncludeForms.js` (or `dist/ajaxIncludePlugins.js`) and `$(...).serialize()` is available.
-
-    <form action="demo-content/form-response.html" method="post" data-replace data-interaction>
-      <input type="text" name="textField" value="Test">
-      <input type="submit" value="Submit">
-    </form>
-
-
-    $( "form[data-interaction]" ).bind( "submit", function() {
-      $( this ).removeAttr( "data-interaction" ).ajaxInclude();
-      return false;
-    });
+See also: [HijaxInclude with forms](README-plugins.md).
 
 ### Targeting a separate element.
 

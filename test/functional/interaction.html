@@ -30,6 +30,9 @@ body > div {
 		<h2 id="my-target4"><a href="demo-content/related.html" data-append data-interaction data-target="#my-target4">Related Articles (append)</a></h2>
 	</div>
 	<div>
+		<h2 id="my-target5"><a href="demo-content/redirect.php" data-append data-interaction data-target="#my-target5">If PHP is enabled, this will redirect to /.</a></h2>
+	</div>
+	<div>
 		<h2>Form (get) Example</h2>
 		<p>If PHP enabled, the example response will output the GET variables</p>
 		<form action="demo-content/form-response.php" method="get" data-replace data-interaction>
@@ -51,11 +54,18 @@ body > div {
 	<script src="../../libs/matchMedia/matchMedia.addListener.js"></script>
 	<script src="../../src/ajaxInclude.js"></script>
 	<script src="../../src/ajaxIncludeForms.js"></script>
+	<script src="../../src/ajaxIncludeHeaderHooks.js"></script>
 	<script>
 		$( "[data-after],[data-before],[data-append],[data-replace]" ).ajaxInclude();
 
 		$( "a[data-interaction]" ).bind( "click", function() {
-			$( this ).removeAttr( "data-interaction" ).ajaxInclude();
+			$( this ).removeAttr( "data-interaction" ).ajaxInclude({
+				headerCallbacks: {
+					'X-AjaxInclude-Redirect': function( url ) {
+						window.location.href = url;
+					}
+				}
+			});
 			return false;
 		});
 

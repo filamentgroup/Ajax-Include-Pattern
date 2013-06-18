@@ -5,10 +5,11 @@
 		interactionAttr: "data-interaction",
 		// request a url and trigger ajaxInclude on elements upon response
 		makeReq: function( url, els, isHijax ) {
-			$.get( url, function( data ) {
-				els.trigger( "ajaxIncludeResponse", [data] );
+			$.get( url, function( data, status, xhr ) {
+				els.trigger( "ajaxIncludeResponse", [ data, xhr ] );
 			});
-		}
+		},
+		plugins: {}
 	};
 
 	$.fn.ajaxInclude = function( options ) {
@@ -88,15 +89,19 @@
 				method += "With";
 			}
 
-			el
-				.data( "method", method )
+			el.data( "method", method )
 				.data( "url", url )
 				.data( "target", target )
 				.attr( AI.boundAttr, true )
-				.bind( "ajaxIncludeResponse", function(e, data){
+				.each( function() {
+					for( var j in AI.plugins ) {
+						AI.plugins[ j ].call( this, o );
+					}
+				})
+				.bind( "ajaxIncludeResponse", function( e, data, xhr ){
 					var content = data,
 						targetEl = target ? $( target ) : el;
-					
+
 					if( o.proxy ){
 						var subset = content.match( new RegExp( "<entry url=[\"']?" + el.data( "url" ) + "[\"']?>(?:(?!</entry>)(.|\n))*", "gmi" ) );
 						if( subset ){

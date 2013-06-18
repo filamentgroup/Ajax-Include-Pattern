@@ -14,8 +14,8 @@
 					var method = ( els.attr( 'method' ) || '' ).toLowerCase() === 'post' ? 'post' : 'get',
 						formData = els.serialize();
 
-					$[ method ]( url, formData, function( data ) {
-						els.trigger( "ajaxIncludeResponse", [data] );
+					$[ method ]( url, formData, function( data, status, xhr ) {
+						els.trigger( "ajaxIncludeResponse", [ data, xhr ] );
 					});
 				} else {
 					throw new Error( '$.fn.serialize required for ajaxInclude on forms.' );
