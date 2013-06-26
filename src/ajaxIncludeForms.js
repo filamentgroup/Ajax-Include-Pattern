@@ -8,7 +8,7 @@
 		var originalMakeReq = win.AjaxInclude.makeReq;
 
 		win.AjaxInclude.makeReq = function( url, els, isHijax ) {
-			if( isHijax && els[ 0 ].tagName.toLowerCase() === 'form' ) {
+			if( isHijax && els.length && els[ 0 ].tagName && els[ 0 ].tagName === 'FORM' ) {
 				if( $.prototype.serialize ) {
 					// If not post, default to get.
 					var method = ( els.attr( 'method' ) || '' ).toLowerCase() === 'post' ? 'post' : 'get',
