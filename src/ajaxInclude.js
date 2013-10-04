@@ -144,4 +144,4 @@
 	};
 
 	win.AjaxInclude = AI;
-}( jQuery, this ));
+}( $, this ));
