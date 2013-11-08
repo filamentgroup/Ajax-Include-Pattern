@@ -58,7 +58,7 @@ body > div {
 	<script>
 		$( "[data-after],[data-before],[data-append],[data-replace]" ).ajaxInclude();
 
-		$( "a[data-interaction]" ).bind( "click", function() {
+		$( "a[data-interaction]" ).bind( "click", function( event ) {
 			$( this ).removeAttr( "data-interaction" ).ajaxInclude({
 				headerCallbacks: {
 					'X-AjaxInclude-Redirect': function( url ) {
@@ -66,12 +66,14 @@ body > div {
 					}
 				}
 			});
-			return false;
+
+			event.preventDefault();
 		});
 
-		$( "form[data-interaction]" ).bind( "submit", function() {
+		$( "form[data-interaction]" ).bind( "submit", function( event ) {
 			$( this ).removeAttr( "data-interaction" ).ajaxInclude();
-			return false;
+
+			event.preventDefault();
 		});
 	</script>
 </body>

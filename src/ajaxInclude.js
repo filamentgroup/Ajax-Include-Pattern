@@ -63,7 +63,7 @@
 		}
 		
 		// loop through els, bind handlers
-		this.not( "[" + AI.boundAttr + "],[" + AI.interactionAttr + "]" ).each(function( k ) {
+		this.not( "[" + AI.boundAttr + "]").not("[" + AI.interactionAttr + "]" ).each(function( k ) {
 			var el = $( this ),
 				media = el.attr( "data-media" ),
 				methods = [ "append", "replace", "before", "after" ],
