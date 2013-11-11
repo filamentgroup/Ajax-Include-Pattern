@@ -1,4 +1,4 @@
-/*! Ajax-Include - v0.1.2 - 2013-06-18
+/*! Ajax-Include - v0.1.3 - 2013-11-11
 * http://filamentgroup.com/lab/ajax_includes_modular_content/
 * Copyright (c) 2013 @scottjehl, Filament Group, Inc.; Licensed MIT */
 
@@ -7,7 +7,7 @@
 		var originalMakeReq = win.AjaxInclude.makeReq;
 
 		win.AjaxInclude.makeReq = function( url, els, isHijax ) {
-			if( isHijax && els[ 0 ].tagName.toLowerCase() === 'form' ) {
+			if( isHijax && els.length && els[ 0 ].tagName && els[ 0 ].tagName === 'FORM' ) {
 				if( $.prototype.serialize ) {
 					// If not post, default to get.
 					var method = ( els.attr( 'method' ) || '' ).toLowerCase() === 'post' ? 'post' : 'get',
