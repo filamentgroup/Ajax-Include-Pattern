@@ -1,6 +1,6 @@
 # Ajax-include pattern 
 
-[![Filament Group](http://filamentgroup.com/images/fg-logo-positive-tiny.png) ](http://www.filamentgroup.com/)
+[![Filament Group](http://filamentgroup.com/images/fg-logo-positive-sm-crop.png) ](http://www.filamentgroup.com/)
 
 © 2012, Scott Jehl, Filament Group, Inc. Original idea from Scott Gonzalez :)
 
