@@ -4,8 +4,11 @@
 	<meta charset="utf-8">
 	<title>Ajax-Include Test Suite</title>
 	<!-- Load local jQuery, removing access to $ (use jQuery, not $). -->
-	<script src="../libs/jquery/jquery.js"></script>
-	<script>jQuery.noConflict()</script>
+	<!-- NOTE: uncomment remove the shoestring/jQuery alias below to test with jQuery -->
+	<!-- <script src="../libs/jquery/jquery.js"></script> -->
+	<!-- <script>jQuery.noConflict()</script> -->
+	<script src="../libs/shoestring-dev.js"></script>
+	<script>window.jQuery = window.shoestring;</script>
 	<!-- Load local QUnit (grunt requires v1.0.0 or newer). -->
 	<link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
 	<script src="../libs/qunit/qunit.js"></script>
@@ -31,12 +34,14 @@
 		<div id="dap" data-append="functional/demo-content/related.html"></div>
 
 		<div id="filter" data-append="functional/demo-content/related.html"></div>
-		
+
 		<div id="dm-a" data-media="screen" data-append="functional/demo-content/related.html"></div>
 		<div id="dm-i" data-media="print" data-append="functional/demo-content/related.html"></div>
+
 		<div>
 			<a id="hijax-a" href="functional/demo-content/related.html" data-after data-interaction></a>
 		</div>
+
 		<div>
 			<form id="hijax-form" action="functional/demo-content/related.html" data-after data-interaction>
 				<input type="text" name="textField" value="value">
