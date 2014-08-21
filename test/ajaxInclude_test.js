@@ -67,23 +67,27 @@
 
 			ok( dr.length === 1 );
 
-			dr
-				.bind( "ajaxIncludeResponse", function(){
-					ok( $(this).parent().length === 0 );
+			dr.bind( "ajaxInclude", function(){
+				var self = this;
+
+				// the event runs before the replace with, so let the stack unwind and then check
+				setTimeout(function() {
+					ok( $( self ).parent().length === 0 );
 					ok( $( "#dr" ).length === 0 );
+
 					start();
-				} )
-				.ajaxInclude();
-		} );
+				});
+			}).ajaxInclude();
+		});
 
 		asyncTest( "Data-append is appending content to target element", 1, function(){
 			$( "#dap" )
 				.bind( "ajaxInclude", function(){
 					ok( $( "#dap" ).children().length === 1 );
 					start();
-				} )
+				})
 				.ajaxInclude();
-		} );
+		});
 
 
 

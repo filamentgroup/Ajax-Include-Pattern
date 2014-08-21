@@ -1271,8 +1271,8 @@
 
 		this.each(function(){
 			// no parent node, assume top level
-			// TODO maybe this should be a more precise check for the document?
-			parent = this.parentElement || document.documentElement;
+			// jQuery parent: return the document object for <html> or the parent node if it exists
+			parent = (this === document.documentElement ? document : this.parentNode);
 
 			if( parent ){
 				ret.push( parent );
