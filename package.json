@@ -29,10 +29,11 @@
 		"test" : "grunt travis --verbose"
 	},
 	"dependencies": {
-		"jquery": "~1.7.2"
+		"jquery": "^1.11.2"
 	},
 	"devDependencies": {
-		"grunt": "~0.3.17"
+		"grunt": "~0.3.17",
+		"qunitjs": "^1.17.1"
 	},
 	"keywords": []
 }

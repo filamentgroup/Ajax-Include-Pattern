@@ -1,208 +1,84 @@
-/*! Shoestring - v0.1.4 - 2014-08-21
+/*! Shoestring - v1.0.2 - 2014-11-10
 * http://github.com/filamentgroup/shoestring/
 * Copyright (c) 2014 Scott Jehl, Filament Group, Inc; Licensed MIT & GPLv2 */ 
-(function( w, undefined ){	
-	var doc = w.document,
-		shoestring = function( prim, sec ){
-
-			var pType = typeof( prim ),
+(function( w, undefined ){
+	/**
+	 * The shoestring object constructor.
+	 *
+	 * @param {string,object} prim The selector to find or element to wrap.
+	 * @param {object} sec The context in which to match the `prim` selector.
+	 * @returns shoestring
+	 * @this window
+	 */
+	function shoestring( prim, sec ){
+		var pType = typeof( prim ),
 				ret = [],
 				sel;
 
-			if( prim ){
-				// if string starting with <, make html
-				if( pType === "string" && prim.indexOf( "<" ) === 0 ){
-					var dfrag = document.createElement( "div" );
-					dfrag.innerHTML = prim;
-					return shoestring( dfrag ).children().each(function(){
-						dfrag.removeChild( this );
-					});
+		if( prim ){
+			// if string starting with <, make html
+			if( pType === "string" && prim.indexOf( "<" ) === 0 ){
+				var dfrag = document.createElement( "div" );
+				dfrag.innerHTML = prim;
+				return shoestring( dfrag ).children().each(function(){
+					dfrag.removeChild( this );
+				});
+			}
+			else if( pType === "function" ){
+				return shoestring.ready( prim );
+			}
+			// if string, it's a selector, use qsa
+			else if( pType === "string" ){
+				if( sec ){
+					return shoestring( sec ).find( prim );
 				}
-				else if( pType === "function" ){
-					return shoestring.ready( prim );
+				try {
+					sel = document.querySelectorAll( prim );
+				} catch( e ) {
+					shoestring.error( 'queryselector', prim );
 				}
-				// if string, it's a selector, use qsa
-				else if( pType === "string" ){
-					if( sec ){
-						return shoestring( sec ).find( prim );
-					}
-					try {
-						sel = doc.querySelectorAll( prim );
-					} catch( e ) {
-						shoestring.error( 'queryselector', prim );
-					}
-					for( var i = 0, il = sel.length; i < il; i++ ){
-						ret[ i ] = sel[ i ];
-					}
-				}
-				else if( Object.prototype.toString.call( pType ) === '[object Array]' ||
-					pType === "object" && prim instanceof w.NodeList ){
-
-					for( var i2 = 0, il2 = prim.length; i2 < il2; i2++ ){
-						ret[ i2 ] = prim[ i2 ];
-					}
-				}
-				// object? passthrough
-				else {
-					ret = ret.concat( prim );
+				for( var i = 0, il = sel.length; i < il; i++ ){
+					ret[ i ] = sel[ i ];
 				}
 			}
-			// if no prim, return a wrapped doc
-			else{
-				ret.push( doc );
+			else if( Object.prototype.toString.call( pType ) === '[object Array]' ||
+							 pType === "object" && prim instanceof w.NodeList ){
+
+								 for( var i2 = 0, il2 = prim.length; i2 < il2; i2++ ){
+									 ret[ i2 ] = prim[ i2 ];
+								 }
+							 }
+			// object? passthrough
+			else {
+				ret = ret.concat( prim );
 			}
+		}
 
-			ret = shoestring.extend( ret, shoestring.fn );
+		ret = shoestring.extend( ret, shoestring.fn );
 
-			// add selector prop
-			ret.selector = prim;
+		// add selector prop
+		ret.selector = prim;
 
-			return ret;
-		};
+		return ret;
+	}
 
 	// For adding element set methods
 	shoestring.fn = {};
 
-	// Public each method
-	// For iteration on sets
-	shoestring.fn.each = function( fn ){
-		for( var i = 0, il = this.length; i < il; i++ ){
-			fn.call( this[ i ], i );
-		}
-		return this;
-	};
-
-	// For contextual lookups
-	shoestring.fn.find = function( sel ){
-		var ret = [],
-			finds;
-		this.each(function(){
-			try {
-				finds = this.querySelectorAll( sel );
-			} catch( e ) {
-				shoestring.error( 'queryselector', sel );
-			}
-
-			for( var i = 0, il = finds.length; i < il; i++ ){
-				ret = ret.concat( finds[i] );
-			}
-		});
-		return shoestring( ret );
-	};
-
-	// Children - get element child nodes.
-	// This is needed for HTML string creation
-	shoestring.fn.children = function(){
-		var ret = [],
-			childs,
-			j;
-		this.each(function(){
-			childs = this.children;
-			j = -1;
-
-			while( j++ < childs.length-1 ){
-				if( shoestring.inArray(  childs[ j ], ret ) === -1 ){
-					ret.push( childs[ j ] );
-				}
-			}
-		});
-		return shoestring(ret);
-	};
-
-	// Public non-dom utilities
-
-	// browser support qualifier - shoestring any usage of shoestring in a qualify callback
-	shoestring.qualified = "querySelectorAll" in doc;
-
-	shoestring.qualify = function( callback ){
-		if( callback && shoestring.qualified ){
-			return callback();
-		}
-		// return support bool if there's no callback
-		else if( !callback ){
-			return shoestring.qualified;
-		}
-	};
-
 	// For extending objects
+	// TODO move to separate module when we use prototypes
 	shoestring.extend = function( first, second ){
 		for( var i in second ){
 			if( second.hasOwnProperty( i ) ){
 				first[ i ] = second[ i ];
 			}
 		}
+
 		return first;
 	};
 
-	// check if an item exists in an array
-	shoestring.inArray = function( needle, haystack ){
-		var isin = -1;
-		for( var i = 0, il = haystack.length; i < il; i++ ){
-			if( haystack.hasOwnProperty( i ) && haystack[ i ] === needle ){
-				isin = i;
-			}
-		}
-		return isin;
-	};
-
-	// For DOM ready execution
-	shoestring.ready = function( fn ){
-		if( ready && fn && shoestring.qualified ){
-			fn.call( document );
-		}
-		else if( fn && shoestring.qualified ){
-			readyQueue.push( fn );
-		}
-		else {
-			runReady();
-		}
-
-		return [doc];
-	};
-
-	// non-shortcut ready
-	shoestring.fn.ready = function( fn ){
-		shoestring.ready( fn );
-		return this;
-	};
-
-	// Empty and exec the ready queue
-	var ready = false,
-		readyQueue = [],
-		runReady = function(){
-			if( !ready ){
-				while( readyQueue.length ){
-					readyQueue.shift().call( document );
-				}
-				ready = true;
-			}
-		};
-
-	// Quick IE8 shiv
-	if( !w.addEventListener ){
-		w.addEventListener = function( evt, cb ){
-			return w.attachEvent( "on" + evt, cb );
-		};
-	}
-
-	// DOM ready
-	// If DOM is already ready at exec time
-	if( doc.readyState === "complete" || doc.readyState === "interactive" ){
-		runReady();
-	}
-	else {
-		if( !w.document.addEventListener ){
-			w.document.attachEvent( "DOMContentLoaded", runReady );
-			w.document.attachEvent( "onreadystatechange", runReady );
-		} else {
-			w.document.addEventListener( "DOMContentLoaded", runReady, false );
-			w.document.addEventListener( "readystatechange", runReady, false );
-		}
-		w.addEventListener( "load", runReady, false );
-	}
-
 	// expose
-	w.shoestring = shoestring;
+	window.shoestring = shoestring;
 
 
 
@@ -212,11 +88,13 @@
 
 			"click": "the click method. Try using trigger( 'click' ) instead.",
 			"css-get" : "getting computed attributes from the DOM.",
-			"event-namespaces": "event namespacing, especially on .unbind( '.myNamespace' ). An event namespace is treated as part of the event name.",
 			"has-class" : "the hasClass method. Try using .is( '.klassname' ) instead.",
+			"html-function" : "passing a function into .html. Try generating the html you're passing in an outside function",
 			"live-delegate" : "the .live or .delegate methods. Use .bind or .on instead.",
 			"map": "the map method. Try using .each to make a new object.",
 			"next-selector" : "passing selectors into .next, try .next().filter( selector )",
+			"off-delegate" : ".off( events, selector, handler ) or .off( events, selector ). Use .off( eventName, callback ) instead.",
+			"next-until" : "the .nextUntil method. Use .next in a loop until you reach the selector, don't include the selector",
 			"on-delegate" : "the .on method with three or more arguments. Using .on( eventName, callback ) instead.",
 			"outer-width": "the outerWidth method. Try combining .width() with .css for padding-left, padding-right, and the border of the left and right side.",
 			"prev-selector" : "passing selectors into .prev, try .prev().filter( selector )",
@@ -224,6 +102,7 @@
 			"queryselector": "all CSS selectors on querySelector (varies per browser support). Specifically, this failed: ",
 			"show-hide": "the show or hide methods. Use display: block (or whatever you'd like it to be) or none instead",
 			"text-setter": "setting text via the .text method.",
+			"toggle-class" : "the toggleClass method. Try using addClass or removeClass instead.",
 			"trim": "the trim method. Try using replace(/^\\s+|\\s+$/g, ''), or just String.prototype.trim if you don't need to support IE8"
 		}
 	};
@@ -302,7 +181,7 @@
 			return req;
 		}
 
-		req.send( null );
+		req.send( settings.data || null );
 		return req;
 	};
 
@@ -374,6 +253,114 @@
 
 
 	/**
+	 * Iterates over `shoestring` collections.
+	 *
+	 * @param {function} callback The callback to be invoked on each element and index
+	 * @return shoestring
+	 * @this shoestring
+	 */
+	shoestring.fn.each = function( callback ){
+		return shoestring.each( this, callback );
+	};
+
+	shoestring.each = function( collection, callback ) {
+		var val;
+		for( var i = 0, il = collection.length; i < il; i++ ){
+			val = callback.call( collection[i], i, collection[i] );
+			if( val === false ){
+				break;
+			}
+		}
+
+		return collection;
+	};
+
+
+
+  /**
+	 * Check for array membership.
+	 *
+	 * @param {object} needle The thing to find.
+	 * @param {object} haystack The thing to find the needle in.
+	 * @return {boolean}
+	 * @this window
+	 */
+	shoestring.inArray = function( needle, haystack ){
+		var isin = -1;
+		for( var i = 0, il = haystack.length; i < il; i++ ){
+			if( haystack.hasOwnProperty( i ) && haystack[ i ] === needle ){
+				isin = i;
+			}
+		}
+		return isin;
+	};
+
+
+
+  /**
+	 * Bind callbacks to be run when the DOM is "ready".
+	 *
+	 * @param {function} fn The callback to be run
+	 * @return shoestring
+	 * @this shoestring
+	 */
+	shoestring.ready = function( fn ){
+		if( ready && fn ){
+			fn.call( document );
+		}
+		else if( fn ){
+			readyQueue.push( fn );
+		}
+		else {
+			runReady();
+		}
+
+		return [document];
+	};
+
+	// TODO necessary?
+	shoestring.fn.ready = function( fn ){
+		shoestring.ready( fn );
+		return this;
+	};
+
+	// Empty and exec the ready queue
+	var ready = false,
+		readyQueue = [],
+		runReady = function(){
+			if( !ready ){
+				while( readyQueue.length ){
+					readyQueue.shift().call( document );
+				}
+				ready = true;
+			}
+		};
+
+	// Quick IE8 shiv
+	if( !w.addEventListener ){
+		w.addEventListener = function( evt, cb ){
+			return w.attachEvent( "on" + evt, cb );
+		};
+	}
+
+	// If DOM is already ready at exec time, depends on the browser.
+	// From: https://github.com/mobify/mobifyjs/blob/526841be5509e28fc949038021799e4223479f8d/src/capture.js#L128
+	if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+		runReady();
+	}	else {
+		if( !w.document.addEventListener ){
+			w.document.attachEvent( "DOMContentLoaded", runReady );
+			w.document.attachEvent( "onreadystatechange", runReady );
+		} else {
+			w.document.addEventListener( "DOMContentLoaded", runReady, false );
+			w.document.addEventListener( "readystatechange", runReady, false );
+		}
+		w.addEventListener( "load", runReady, false );
+	}
+
+
+
+	/**
 	 * Get data attached to the first element or set data values on all elements in the current set.
 	 *
 	 * @param {string} name The data attribute name.
@@ -422,6 +409,9 @@
 
 
 
+	/**
+	 * An alias for the `shoestring` constructor.
+	 */
 	window.$ = shoestring;
 
 
@@ -579,6 +569,30 @@
 				this.parentNode.insertBefore( i > 0 ? fragment[ j ].cloneNode( true ) : fragment[ j ], this );
 			}
 		});
+	};
+
+
+
+	/**
+	 * Get the children of the current collection.
+	 * @return shoestring
+	 * @this shoestring
+	 */
+	shoestring.fn.children = function(){
+		var ret = [],
+			childs,
+			j;
+		this.each(function(){
+			childs = this.children;
+			j = -1;
+
+			while( j++ < childs.length-1 ){
+				if( shoestring.inArray(  childs[ j ], ret ) === -1 ){
+					ret.push( childs[ j ] );
+				}
+			}
+		});
+		return shoestring(ret);
 	};
 
 
@@ -950,9 +964,10 @@
 
 
 	/**
-	 * Filter out the current set if they do *not* match the passed selector.
+	 * Filter out the current set if they do *not* match the passed selector or
+	 * the supplied callback returns false
 	 *
-	 * @param {string} selector The selector used to filter the elements.
+	 * @param {string,function} selector The selector or boolean return value callback used to filter the elements.
 	 * @return shoestring
 	 * @this shoestring
 	 */
@@ -982,6 +997,32 @@
 			}
 		});
 
+		return shoestring( ret );
+	};
+
+
+
+	/**
+	 * Find descendant elements of the current collection.
+	 *
+	 * @param {string} selector The selector used to find the children
+	 * @return shoestring
+	 * @this shoestring
+	 */
+	shoestring.fn.find = function( selector ){
+		var ret = [],
+			finds;
+		this.each(function(){
+			try {
+				finds = this.querySelectorAll( selector );
+			} catch( e ) {
+				shoestring.error( 'queryselector', selector );
+			}
+
+			for( var i = 0, il = finds.length; i < il; i++ ){
+				ret = ret.concat( finds[i] );
+			}
+		});
 		return shoestring( ret );
 	};
 
@@ -1057,6 +1098,25 @@
 
 
 
+	var set = function( html ){
+		if( typeof html === "string" ){
+			return this.each(function(){
+				this.innerHTML = html;
+			});
+		} else {
+			var h = "";
+			if( typeof html.length !== "undefined" ){
+				for( var i = 0, l = html.length; i < l; i++ ){
+					h += html[i].outerHTML;
+				}
+			} else {
+				h = html.outerHTML;
+			}
+			return this.each(function(){
+				this.innerHTML = h;
+			});
+		}
+	};
 	/**
 	 * Gets or sets the `innerHTML` from all the elements in the set.
 	 *
@@ -1065,11 +1125,12 @@
 	 * @this shoestring
 	 */
 	shoestring.fn.html = function( html ){
-		if( html ){
-			return this.each(function(){
-				this.innerHTML = html;
-			});
-		} else {
+				if( !!html && typeof html === "function" ){
+			shoestring.error( 'html-function' );
+		}
+				if( typeof html !== "undefined" ){
+			return set.call( this, html );
+		} else { // get
 			var pile = "";
 
 			this.each(function(){
@@ -1118,7 +1179,7 @@
 
 			// no arg? check the children, otherwise check each element that matches
 			if( selector === undefined ){
-				children = (this[0].parentNode || document.documentElement).childNodes;
+				children = ( ( this[ 0 ] && this[0].parentNode ) || document.documentElement).childNodes;
 
 				// check if the element matches the first of the set
 				return _getIndex(children, function( element ) {
@@ -1274,7 +1335,8 @@
 			// jQuery parent: return the document object for <html> or the parent node if it exists
 			parent = (this === document.documentElement ? document : this.parentNode);
 
-			if( parent ){
+			// if there is a parent and it's not a document fragment
+			if( parent && parent.nodeType !== 11 ){
 				ret.push( parent );
 			}
 		});
@@ -1343,6 +1405,21 @@
 					this.appendChild( insertEl );
 				}
 			}
+		});
+	};
+
+
+
+	/**
+	 * Add each element of the current set before the children of the selected elements.
+	 *
+	 * @param {string} selector The selector for the elements to add the current set to..
+	 * @return shoestring
+	 * @this shoestring
+	 */
+	shoestring.fn.prependTo = function( selector ){
+		return this.each(function(){
+			shoestring( selector ).prepend( this );
 		});
 	};
 
@@ -1544,13 +1621,26 @@
 
 		var ret = [];
 
+		if( fragment.length > 1 ){
+			fragment = fragment.reverse();
+		}
 		this.each(function( i ){
-			for( var j = 0, jl = fragment.length; j < jl; j++ ){
-				var insertEl = i > 0 ? fragment[ j ].cloneNode( true ) : fragment[ j ];
+			var clone = this.cloneNode( true ),
+				insertEl;
+			ret.push( clone );
 
-				this.parentNode.insertBefore( insertEl, this );
-				insertEl.parentNode.removeChild( this );
-				ret.push( insertEl );
+			// If there is no parentNode, this is pointless, drop it.
+			if( !this.parentNode ){ return; }
+
+			if( fragment.length === 1 ){
+				insertEl = i > 0 ? fragment[ 0 ].cloneNode( true ) : fragment[ 0 ];
+				this.parentNode.replaceChild( insertEl, this );
+			} else {
+				for( var j = 0, jl = fragment.length; j < jl; j++ ){
+					insertEl = i > 0 ? fragment[ j ].cloneNode( true ) : fragment[ j ];
+					this.parentNode.insertBefore( insertEl, this.nextSibling );
+				}
+				this.parentNode.removeChild( this );
 			}
 		});
 
@@ -1722,6 +1812,7 @@
 			el = this[0];
 
 			if( el.tagName === "SELECT" ){
+				if( el.selectedIndex < 0 ){ return ""; }
 				return el.options[ el.selectedIndex ].value;
 			} else {
 				return el.value;
@@ -1762,6 +1853,62 @@
 
 
 
+	function initEventCache( el, evt ) {
+		if ( !el.shoestringData ) {
+			el.shoestringData = {};
+		}
+		if ( !el.shoestringData.events ) {
+			el.shoestringData.events = {};
+		}
+		if ( !el.shoestringData.loop ) {
+			el.shoestringData.loop = {};
+		}
+		if ( !el.shoestringData.events[ evt ] ) {
+			el.shoestringData.events[ evt ] = [];
+		}
+	}
+
+	function addToEventCache( el, evt, eventInfo ) {
+		var obj = {};
+		obj.isCustomEvent = eventInfo.isCustomEvent;
+		obj.callback = eventInfo.callfunc;
+		obj.originalCallback = eventInfo.originalCallback;
+		obj.namespace = eventInfo.namespace;
+
+		el.shoestringData.events[ evt ].push( obj );
+
+		if( eventInfo.customEventLoop ) {
+			el.shoestringData.loop[ evt ] = eventInfo.customEventLoop;
+		}
+	}
+
+	// In IE8 the events trigger in a reverse order (LIFO). This code
+	// unbinds and rebinds all callbacks on an element in the a FIFO order.
+	function reorderEvents( node, eventName ) {
+		if( node.addEventListener || !node.shoestringData || !node.shoestringData.events ) {
+			// add event listner obviates the need for all the callback order juggling
+			return;
+		}
+
+		var otherEvents = node.shoestringData.events[ eventName ] || [];
+		for( var j = otherEvents.length - 1; j >= 0; j-- ) {
+			// DOM Events only, Custom events maintain their own order internally.
+			if( !otherEvents[ j ].isCustomEvent ) {
+				node.detachEvent( "on" + eventName, otherEvents[ j ].callback );
+				node.attachEvent( "on" + eventName, otherEvents[ j ].callback );
+			}
+		}
+	}
+
+	/**
+	 * Bind a callback to an event for the currrent set of elements.
+	 *
+	 * @param {string} evt The event(s) to watch for.
+	 * @param {object,function} data Data to be included with each event or the callback.
+	 * @param {function} originalCallback Callback to be invoked when data is define.d.
+	 * @return shoestring
+	 * @this shoestring
+	 */
 	shoestring.fn.bind = function( evt, data, originalCallback ){
 
 				if( arguments.length > 3 ){
@@ -1776,31 +1923,18 @@
 		}
 
 		var evts = evt.split( " " ),
-			docEl = document.documentElement,
-			addToEventCache = function( el, evt, callback ) {
-				if ( !el.shoestringData ) {
-					el.shoestringData = {};
-				}
-				if ( !el.shoestringData.events ) {
-					el.shoestringData.events = {};
-				}
-				if ( !el.shoestringData.events[ evt ] ) {
-					el.shoestringData.events[ evt ] = [];
-				}
-				var obj = {};
-				if( callback.customCallfunc ) {
-					obj.isCustomEvent = true;
-				}
-				obj.callback = callback.customCallfunc || callback.callfunc;
-				obj.originalCallback = callback.originalCallback;
+			docEl = document.documentElement;
 
-				el.shoestringData.events[ evt ].push( obj );
-			};
+		// NOTE the `triggeredElement` is purely for custom events from IE
+		function encasedCallback( e, namespace, triggeredElement ){
+			var result;
 
-		function encasedCallback( e ){
-      var result;
+			if( e._namespace && e._namespace !== namespace ) {
+				return;
+			}
 
 			e.data = data;
+			e.namespace = e._namespace;
 
 			var returnTrue = function(){
 				return true;
@@ -1826,87 +1960,119 @@
 			};
 
 			// thanks https://github.com/jonathantneal/EventListener
-			e.target = e.target || e.srcElement;
+			e.target = triggeredElement || e.target || e.srcElement;
 			e.preventDefault = preventDefaultConstructor();
 			e.stopPropagation = e.stopPropagation || function () {
 				e.cancelBubble = true;
 			};
 
-      result = originalCallback.apply(this, [ e ].concat( e._args ) );
+			result = originalCallback.apply(this, [ e ].concat( e._args ) );
 
-      if( result === false ){
-        e.preventDefault();
-        e.stopPropagation();
-      }
+			if( result === false ){
+				e.preventDefault();
+				e.stopPropagation();
+			}
 
 			return result;
 		}
 
 		// This is exclusively for custom events on browsers without addEventListener (IE8)
-		function propChange( originalEvent, boundElement ) {
-			var triggeredElement = document.documentElement[ originalEvent.propertyName ].el;
+		function propChange( originalEvent, boundElement, namespace ) {
+			var lastEventInfo = document.documentElement[ originalEvent.propertyName ],
+				triggeredElement = lastEventInfo.el;
 
-			if( triggeredElement !== undefined && shoestring( triggeredElement ).closest( boundElement ).length ) {
-				encasedCallback.call( triggeredElement, originalEvent );
+			var boundCheckElement = boundElement;
+
+			if( boundElement === document && triggeredElement !== document ) {
+				boundCheckElement = document.documentElement;
 			}
-		}
 
-		// In IE8 the events trigger in a reverse order. This code unbinds and
-		// rebinds all callbacks on an element in the correct order.
-		function reorderEvents( eventName ) {
-			if( !this.attachEvent ) {
-				// do onthing
-				return;
-			} else if( this.shoestringData && this.shoestringData.events ) {
-				var otherEvents = this.shoestringData.events[ eventName ];
-				for( var j = otherEvents.length - 1; j >= 0; j-- ) {
-					if( !otherEvents[ j ].isCustomEvent ) {
-						this.detachEvent( "on" + eventName, otherEvents[ j ].callback );
-						this.attachEvent( "on" + eventName, otherEvents[ j ].callback );
-					} else {
-						docEl.detachEvent( "onpropertychange", otherEvents[ j ].callback );
-						docEl.attachEvent( "onpropertychange", otherEvents[ j ].callback );
-					}
-				}
+			if( triggeredElement !== undefined &&
+				shoestring( triggeredElement ).closest( boundCheckElement ).length ) {
+
+				originalEvent._namespace = lastEventInfo._namespace;
+				originalEvent._args = lastEventInfo._args;
+				encasedCallback.call( boundElement, originalEvent, namespace, triggeredElement );
 			}
 		}
 
 		return this.each(function(){
-			var domEventCallback, customEventCallback, oEl = this;
+			var domEventCallback,
+				customEventCallback,
+				customEventLoop,
+				oEl = this;
 
 			for( var i = 0, il = evts.length; i < il; i++ ){
-				var evt = evts[ i ];
-				domEventCallback = null;
+				var split = evts[ i ].split( "." ),
+					evt = split[ 0 ],
+					namespace = split.length > 0 ? split[ 1 ] : null;
+
+				domEventCallback = function( originalEvent ) {
+					if( oEl.ssEventTrigger ) {
+						originalEvent._namespace = oEl.ssEventTrigger._namespace;
+						originalEvent._args = oEl.ssEventTrigger._args;
+
+						oEl.ssEventTrigger = null;
+					}
+					return encasedCallback.call( oEl, originalEvent, namespace );
+				};
 				customEventCallback = null;
+				customEventLoop = null;
+
+				initEventCache( this, evt );
 
 				if( "addEventListener" in this ){
-					this.addEventListener( evt, encasedCallback, false );
+					this.addEventListener( evt, domEventCallback, false );
 				} else if( this.attachEvent ){
 					if( this[ "on" + evt ] !== undefined ) {
-						domEventCallback = function( originalEvent ) {
-							return encasedCallback.call( oEl, originalEvent );
-						};
 						this.attachEvent( "on" + evt, domEventCallback );
 					} else {
 						customEventCallback = (function() {
 							var eventName = evt;
 							return function( e ) {
 								if( e.propertyName === eventName ) {
-									propChange.call( this, e, oEl );
+									propChange( e, oEl, namespace );
 								}
 							};
 						})();
-						docEl.attachEvent( "onpropertychange", customEventCallback );
+
+						// only assign one onpropertychange per element
+						if( this.shoestringData.events[ evt ].length === 0 ) {
+							customEventLoop = (function() {
+								var eventName = evt;
+								return function( e ) {
+									if( !oEl.shoestringData || !oEl.shoestringData.events ) {
+										return;
+									}
+									var events = oEl.shoestringData.events[ eventName ];
+									if( !events ) {
+										return;
+									}
+
+									// TODO stopImmediatePropagation
+									for( var j = 0, k = events.length; j < k; j++ ) {
+										events[ j ].callback( e );
+									}
+								};
+							})();
+
+							docEl.attachEvent( "onpropertychange", customEventLoop );
+						}
 					}
 				}
 
-				addToEventCache( this, evts[ i ], {
-					callfunc: domEventCallback || encasedCallback,
-					customCallfunc: customEventCallback,
-					originalCallback: originalCallback
+				addToEventCache( this, evt, {
+					callfunc: customEventCallback || domEventCallback,
+					isCustomEvent: !!customEventCallback,
+					customEventLoop: customEventLoop,
+					originalCallback: originalCallback,
+					namespace: namespace
 				});
 
-				reorderEvents.call( oEl, evt );
+				// Don’t reorder custom events, only DOM Events.
+				if( !customEventCallback ) {
+					reorderEvents( oEl, evt );
+				}
 			}
 		});
 	};
@@ -1923,49 +2089,96 @@
 	
 
 
-	shoestring.fn.unbind = function( evt, callback ){
-		var evts = evt.split( " " ),
-			docEl = document.documentElement;
+	/**
+	 * Unbind a previous bound callback for an event.
+	 *
+	 * @param {string} event The event(s) the callback was bound to..
+	 * @param {function} callback Callback to unbind.
+	 * @return shoestring
+	 * @this shoestring
+	 */
+	shoestring.fn.unbind = function( event, callback ){
+
+				if( arguments.length >= 3 || typeof callback === "string" ){
+			shoestring.error( 'off-delegate' );
+		}
+		
+		var evts = event ? event.split( " " ) : [];
+
 		return this.each(function(){
 			if( !this.shoestringData || !this.shoestringData.events ) {
 				return;
 			}
 
-			for( var i = 0, il = evts.length; i < il; i++ ){
-								if( evts[ i ].indexOf( "." ) === 0 ) {
-					shoestring.error( 'event-namespaces' );
-				}
-				
-				var bound = this.shoestringData.events[ evts[ i ] ];
-				if( bound ) {
-					for( var j = 0, jl = bound.length; j < jl; j++ ) {
-						if( "removeEventListener" in window ){
-							if( callback === undefined ) {
-								this.removeEventListener( evts[ i ], bound[ j ].callback, false );
-							} else if( callback === bound[ j ].originalCallback ) {
-								this.removeEventListener( evts[ i ], bound[ j ].callback, false );
-							}
-						} else if( this.detachEvent ){
-							if( callback === undefined ) {
-								this.detachEvent( "on" + evts[ i ], bound[ j ].callback );
-								// custom event
-								docEl.detachEvent( "onpropertychange", bound[ j ].callback );
-							} else if( callback === bound[ j ].originalCallback ) {
-								this.detachEvent( "on" + evts[ i ], bound[ j ].callback );
-								// custom event
-								docEl.detachEvent( "onpropertychange", bound[ j ].callback );
-							}
-						}
+			if( !evts.length ) {
+				unbindAll.call( this );
+			} else {
+				var split, evt, namespace;
+				for( var i = 0, il = evts.length; i < il; i++ ){
+					split = evts[ i ].split( "." ),
+					evt = split[ 0 ],
+					namespace = split.length > 0 ? split[ 1 ] : null;
+
+					if( evt ) {
+						unbind.call( this, evt, namespace, callback );
+					} else {
+						unbindAll.call( this, namespace, callback );
 					}
 				}
 			}
 		});
 	};
 
+	function unbind( evt, namespace, callback ) {
+		var bound = this.shoestringData.events[ evt ];
+		if( !bound.length ) {
+			return;
+		}
+
+		var matched = [], j, jl;
+		for( j = 0, jl = bound.length; j < jl; j++ ) {
+			if( !namespace || namespace === bound[ j ].namespace ) {
+				if( callback === undefined || callback === bound[ j ].originalCallback ) {
+					if( "removeEventListener" in window ){
+						this.removeEventListener( evt, bound[ j ].callback, false );
+					} else if( this.detachEvent ){
+						// dom event
+						this.detachEvent( "on" + evt, bound[ j ].callback );
+
+						// only unbind custom events if its the last one on the element
+						if( bound.length === 1 && this.shoestringData.loop && this.shoestringData.loop[ evt ] ) {
+							document.documentElement.detachEvent( "onpropertychange", this.shoestringData.loop[ evt ] );
+						}
+					}
+					matched.push( j );
+				}
+			}
+		}
+
+		for( j = 0, jl = matched.length; j < jl; j++ ) {
+			this.shoestringData.events[ evt ].splice( j, 1 );
+		}
+	}
+
+	function unbindAll( namespace, callback ) {
+		for( var evtKey in this.shoestringData.events ) {
+			unbind.call( this, evtKey, namespace, callback );
+		}
+	}
+
+	shoestring.fn.off = shoestring.fn.unbind;
 
 
-	shoestring.fn.one = function( evt, callback ){
-		var evts = evt.split( " " );
+	/**
+	 * Bind a callback to an event for the currrent set of elements, unbind after one occurence.
+	 *
+	 * @param {string} event The event(s) to watch for.
+	 * @param {function} callback Callback to invoke on the event.
+	 * @return shoestring
+	 * @this shoestring
+	 */
+	shoestring.fn.one = function( event, callback ){
+		var evts = event.split( " " );
 
 		return this.each(function(){
 			var thisevt, cbs = {},	$t = shoestring( this );
@@ -1980,7 +2193,7 @@
 						$t.unbind( j, cbs[ j ] );
 					}
 
-					callback.apply( this, [ e ].concat( e._args ) );
+					return callback.apply( this, [ e ].concat( e._args ) );
 				};
 
 				$t.bind( thisevt, cbs[ thisevt ] );
@@ -1990,8 +2203,16 @@
 
 
 
-	shoestring.fn.triggerHandler = function( evt, args ){
-		var e = evt.split( " " )[ 0 ],
+	/**
+	 * Trigger an event on the first element in the set, no bubbling, no defaults.
+	 *
+	 * @param {string} event The event(s) to trigger.
+	 * @param {object} args Arguments to append to callback invocations.
+	 * @return shoestring
+	 * @this shoestring
+	 */
+	shoestring.fn.triggerHandler = function( event, args ){
+		var e = event.split( " " )[ 0 ],
 			el = this[ 0 ],
 			ret;
 
@@ -2016,102 +2237,56 @@
 
 
 
-	shoestring.fn.trigger = function( evt, args ){
-		var evts = evt.split( " " );
+	/**
+	 * Trigger an event on each of the DOM elements in the current set.
+	 *
+	 * @param {string} event The event(s) to trigger.
+	 * @param {object} args Arguments to append to callback invocations.
+	 * @return shoestring
+	 * @this shoestring
+	 */
+	shoestring.fn.trigger = function( event, args ){
+		var evts = event.split( " " );
 
 		return this.each(function(){
+			var split, evt, namespace;
 			for( var i = 0, il = evts.length; i < il; i++ ){
+				split = evts[ i ].split( "." ),
+				evt = split[ 0 ],
+				namespace = split.length > 0 ? split[ 1 ] : null;
+
+				if( evt === "click" ){
+					if( this.tagName === "INPUT" && this.type === "checkbox" && this.click ){
+						this.click();
+						return false;
+					}
+				}
+
 				if( document.createEvent ){
 					var event = document.createEvent( "Event" );
-					event.initEvent( evts[ i ], true, true );
+					event.initEvent( evt, true, true );
 					event._args = args;
+					event._namespace = namespace;
 
 					this.dispatchEvent( event );
 				} else if ( document.createEventObject ) {
-					if( ( "" + this[ evts[ i ] ] ).indexOf( "function" ) > -1 ) {
-						this[ evts[ i ] ]();
+					if( ( "" + this[ evt ] ).indexOf( "function" ) > -1 ) {
+						this.ssEventTrigger = {
+							_namespace: namespace,
+							_args: args
+						};
+
+						this[ evt ]();
 					} else {
-						document.documentElement[ evts[ i ] ] = {
+						document.documentElement[ evt ] = {
 							"el": this,
+							_namespace: namespace,
 							_args: args
 						};
 					}
 				}
 			}
 		});
-	};
-
-
-
-	shoestring.each = function( obj, callback, args ){
-		var value,
-			i = 0,
-			length = obj.length,
-			isArray = ( typeof obj === "object" && Object.prototype.toString.call(obj) === '[object Array]' );
-
-		if ( args ) {
-			if ( isArray ) {
-				for ( ; i < length; i++ ) {
-					value = callback.apply( obj[ i ], args );
-
-					if ( value === false ) {
-						break;
-					}
-				}
-			} else {
-				for ( i in obj ) {
-					value = callback.apply( obj[ i ], args );
-
-					if ( value === false ) {
-						break;
-					}
-				}
-			}
-
-		// A special, fast, case for the most common use of each
-		} else {
-			if ( isArray ) {
-				for ( ; i < length; i++ ) {
-					value = callback.call( obj[ i ], i, obj[ i ] );
-
-					if ( value === false ) {
-						break;
-					}
-				}
-			} else {
-				for ( i in obj ) {
-					value = callback.call( obj[ i ], i, obj[ i ] );
-
-					if ( value === false ) {
-						break;
-					}
-				}
-			}
-		}
-
-		return shoestring( obj );
-	};
-
-
-
-	shoestring.merge = function( first, second ){
-		var l = second.length,
-			i = first.length,
-			j = 0;
-
-		if ( typeof l === "number" ) {
-			for ( ; j < l; j++ ) {
-				first[ i++ ] = second[ j ];
-			}
-		} else {
-			while ( second[j] !== undefined ) {
-				first[ i++ ] = second[ j++ ];
-			}
-		}
-
-		first.length = i;
-
-		return shoestring( first );
 	};
 
 
@@ -2166,7 +2341,7 @@
 
 
 	(function() {
-		shoestring.trachedMethodsKey = "shoestringMethods";
+		shoestring.trackedMethodsKey = "shoestringMethods";
 
 		// simple check for localStorage from http://diveintohtml5.info/storage.html
 		function supportsStorage() {
