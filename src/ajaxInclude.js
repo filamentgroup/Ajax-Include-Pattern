@@ -104,8 +104,8 @@
 
 					if( o.proxy ){
 						var subset = new RegExp("<entry url=[\"']?" + el.data("url") + "[\"']?>((?:(?!</entry>)(.|\n))*)", "gmi").exec(content);
-					    if (subset) {
-						    content = subset[1];
+						if( subset ){
+							content = subset[1];
 						}
 					}
 
