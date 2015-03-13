@@ -103,9 +103,9 @@
 						targetEl = target ? $( target ) : el;
 
 					if( o.proxy ){
-						var subset = content.match( new RegExp( "<entry url=[\"']?" + el.data( "url" ) + "[\"']?>(?:(?!</entry>)(.|\n))*", "gmi" ) );
+						var subset = new RegExp("<entry url=[\"']?" + el.data("url") + "[\"']?>((?:(?!</entry>)(.|\n))*)", "gmi").exec(content);
 						if( subset ){
-							content = subset[ 0 ];
+							content = subset[1];
 						}
 					}
 
