@@ -1,9 +1,10 @@
 # Ajax-include pattern 
 
-* Copyright 2012, Scott Jehl, Filament Group, Inc. Original idea from Scott Gonzalez :)
+[![Filament Group](http://filamentgroup.com/images/fg-logo-positive-sm-crop.png) ](http://www.filamentgroup.com/)
+
+© 2012, Scott Jehl, Filament Group, Inc. Original idea from Scott Gonzalez :)
 
 [![Build Status](https://travis-ci.org/filamentgroup/Ajax-Include-Pattern.png)](http://travis-ci.org/filamentgroup/Ajax-Include-Pattern)
-
 
 ## Getting Started
 Download the [production version][min] or the [development version][max].

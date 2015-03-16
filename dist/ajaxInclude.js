@@ -1,6 +1,6 @@
-/*! Ajax-Include - v0.1.3 - 2014-05-21
+/*! Ajax-Include - v0.1.4 - 2015-03-16
 * http://filamentgroup.com/lab/ajax_includes_modular_content/
-* Copyright (c) 2014 @scottjehl, Filament Group, Inc.; Licensed MIT */
+* Copyright (c) 2015 @scottjehl, Filament Group, Inc.; Licensed MIT */
 
 (function( $, win, undefined ){
 
@@ -31,7 +31,7 @@
 		else {
 			o = $.extend( o, options );
 		}
-		
+
 		// if it's a proxy, que the element and its url, if not, request immediately
 		function queueOrRequest( el ){
 			var url = el.data( "url" );
@@ -43,7 +43,7 @@
 				AI.makeReq( url, el );
 			}
 		}
-		
+
 		// if there's a url queue
 		function runQueue(){
 			if( urllist.length ){
@@ -52,7 +52,7 @@
 				urllist = [];
 			}
 		}
-		
+
 		// bind a listener to a currently-inapplicable media query for potential later changes
 		function bindForLater( el, media ){
 			var mm = win.matchMedia( media );
@@ -65,7 +65,7 @@
 				mm.addListener( cb );
 			}
 		}
-		
+
 		// loop through els, bind handlers
 		this.not( "[" + AI.boundAttr + "]").not("[" + AI.interactionAttr + "]" ).each(function( k ) {
 			var el = $( this ),
@@ -107,14 +107,14 @@
 						targetEl = target ? $( target ) : el;
 
 					if( o.proxy ){
-						var subset = content.match( new RegExp( "<entry url=[\"']?" + el.data( "url" ) + "[\"']?>(?:(?!</entry>)(.|\n))*", "gmi" ) );
+						var subset = new RegExp("<entry url=[\"']?" + el.data("url") + "[\"']?>((?:(?!</entry>)(.|\n))*)", "gmi").exec(content);
 						if( subset ){
-							content = subset[ 0 ];
+							content = subset[1];
 						}
 					}
-					
+
 					var filteredContent = el.triggerHandler( "ajaxIncludeFilter", [ content ] );
-					
+
 					if( filteredContent ){
 						content = filteredContent;
 					}
@@ -139,10 +139,10 @@
 				bindForLater( el, media );
 			}
 		});
-		
+
 		// empty the queue for proxied requests
 		runQueue();
-		
+
 		// return elems
 		return this;
 	};
