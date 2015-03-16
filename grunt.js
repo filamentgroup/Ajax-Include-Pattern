@@ -19,6 +19,18 @@ module.exports = function(grunt) {
 			plugins: {
 				src: ['<banner:meta.banner>', '<file_strip_banner:src/ajaxIncludeForms.js>'],
 				dest: 'dist/ajaxIncludePlugins.js'
+			},
+			jquery: {
+				src: ['node_modules/jquery/dist/jquery.js'],
+				dest: 'libs/jquery.js'
+			},
+			qunitcss: {
+				src: ['node_modules/qunitjs/qunit/qunit.css'],
+				dest: 'libs/qunit.css'
+			},
+			qunitjs: {
+				src: ['node_modules/qunitjs/qunit/qunit.js'],
+				dest: 'libs/qunit.js'
 			}
 		},
 		min: {
@@ -63,8 +75,8 @@ module.exports = function(grunt) {
 	});
 
 	// Default task.
-	grunt.registerTask('default', 'lint qunit concat min');
+	grunt.registerTask('default', 'concat lint qunit min');
 	// Travis
-	grunt.registerTask('travis', 'lint qunit');
+	grunt.registerTask('travis', 'concat lint qunit');
 
 };
