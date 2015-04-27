@@ -104,9 +104,7 @@
 
 					if( o.proxy ){
 						var subset = new RegExp("<entry url=[\"']?" + el.data("url") + "[\"']?>((?:(?!</entry>)(.|\n))*)", "gmi").exec(content);
-						if( subset ){
-							content = subset[1];
-						}
+						content = (subset) ? subset[1] : '';
 					}
 
 					var filteredContent = el.triggerHandler( "ajaxIncludeFilter", [ content ] );
