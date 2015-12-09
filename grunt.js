@@ -13,8 +13,8 @@ module.exports = function(grunt) {
 		},
 		concat: {
 			dist: {
-				src: ['<banner:meta.banner>', '<file_strip_banner:src/<%= pkg.name %>.js>'],
-				dest: 'dist/<%= pkg.name %>.js'
+				src: ['<banner:meta.banner>', '<file_strip_banner:src/ajaxInclude.js>'],
+				dest: 'dist/ajaxInclude.js'
 			},
 			plugins: {
 				src: ['<banner:meta.banner>', '<file_strip_banner:src/ajaxIncludeForms.js>'],
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
 		min: {
 			dist: {
 				src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
-				dest: 'dist/<%= pkg.name %>.min.js'
+				dest: 'dist/ajaxInclude.min.js'
 			},
 			plugins: {
 				src: ['<banner:meta.banner>', '<config:concat.plugins.dest>'],
