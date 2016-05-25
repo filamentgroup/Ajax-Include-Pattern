@@ -28,7 +28,7 @@
 			o = $.extend( o, options );
 		}
 
-		// if it's a proxy, que the element and its url, if not, request immediately
+		// if it's a proxy, queue the element and its url, if not, request immediately
 		function queueOrRequest( el ){
 			var url = el.data( "url" );
 			if( o.proxy && $.inArray( url, urllist ) === -1 ){
