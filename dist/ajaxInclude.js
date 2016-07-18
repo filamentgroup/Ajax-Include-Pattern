@@ -1,6 +1,6 @@
-/*! Ajax-Include - v0.1.4 - 2015-12-09
+/*! fg-ajax-include - v0.2.0 - 2016-07-18
 * http://filamentgroup.com/lab/ajax_includes_modular_content/
-* Copyright (c) 2015 @scottjehl, Filament Group, Inc.; Licensed MIT */
+* Copyright (c) 2016 @scottjehl, Filament Group, Inc.; Licensed MIT */
 
 (function( $, win, undefined ){
 
@@ -32,7 +32,7 @@
 			o = $.extend( o, options );
 		}
 
-		// if it's a proxy, que the element and its url, if not, request immediately
+		// if it's a proxy, queue the element and its url, if not, request immediately
 		function queueOrRequest( el ){
 			var url = el.data( "url" );
 			if( o.proxy && $.inArray( url, urllist ) === -1 ){

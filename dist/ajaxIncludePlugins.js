@@ -1,6 +1,6 @@
-/*! Ajax-Include - v0.1.4 - 2015-12-09
+/*! fg-ajax-include - v0.2.0 - 2016-07-18
 * http://filamentgroup.com/lab/ajax_includes_modular_content/
-* Copyright (c) 2015 @scottjehl, Filament Group, Inc.; Licensed MIT */
+* Copyright (c) 2016 @scottjehl, Filament Group, Inc.; Licensed MIT */
 
 (function( $, win, undefined ){
 	if( typeof win.AjaxInclude !== 'undefined' ) {
