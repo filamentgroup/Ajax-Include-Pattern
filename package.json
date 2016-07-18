@@ -1,39 +1,39 @@
 {
-	"name": "fg-ajax-include",
-	"title": "fg-ajax-include",
-	"description": "An Ajax-Include Pattern for Modular Content",
-	"version": "0.2.0",
-	"homepage": "http://filamentgroup.com/lab/ajax_includes_modular_content/",
-	"author": {
-		"name": "@scottjehl, Filament Group, Inc.",
-		"email": "scott@scottjehl.com"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/filamentgroup/Ajax-Include-Pattern.git"
-	},
-	"bugs": {
-		"url": "https://github.com/filamentgroup/Ajax-Include-Pattern/issues"
-	},
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "http://filamentgroup.com/lab/ajax_includes_modular_content//blob/master/LICENSE-MIT"
-		}
-	],
-	"main": "dist/ajaxInclude.js",
-	"engines": {
-		"node": ">0.6"
-	},
-	"scripts":{
-		"test" : "grunt travis --verbose"
-	},
-	"dependencies": {
-		"jquery": "^1.11.2"
-	},
-	"devDependencies": {
-		"grunt": "~0.3.17",
-		"qunitjs": "^1.17.1"
-	},
-	"keywords": []
+  "name": "fg-ajax-include",
+  "title": "fg-ajax-include",
+  "description": "An Ajax-Include Pattern for Modular Content",
+  "version": "1.0.0",
+  "homepage": "http://filamentgroup.com/lab/ajax_includes_modular_content/",
+  "author": {
+    "name": "@scottjehl, Filament Group, Inc.",
+    "email": "scott@scottjehl.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/filamentgroup/Ajax-Include-Pattern.git"
+  },
+  "bugs": {
+    "url": "https://github.com/filamentgroup/Ajax-Include-Pattern/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://filamentgroup.com/lab/ajax_includes_modular_content//blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "dist/ajaxInclude.js",
+  "engines": {
+    "node": ">0.6"
+  },
+  "scripts": {
+    "test": "grunt travis --verbose"
+  },
+  "dependencies": {
+    "jquery": "^1.11.2"
+  },
+  "devDependencies": {
+    "grunt": "~0.3.17",
+    "qunitjs": "^1.17.1"
+  },
+  "keywords": []
 }
